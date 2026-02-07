@@ -1,10 +1,21 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 export function Navbar() {
   const [isOpen] = useState(false)
   const { scrollY } = useScroll()
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
   
   // Transform values based on scroll position
   const height = useTransform(scrollY, [0, 50], [72, 60])
@@ -14,26 +25,42 @@ export function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
       <motion.div 
-        style={{ height, paddingTop }}
-        className="flex w-full items-center justify-between pointer-events-auto bg-white/40 backdrop-blur-lg border-b border-black/5 rounded-b-[24px]"
+        style={isMobile ? { height, paddingTop } : {}}
+        className={cn(
+          "flex w-full items-center justify-between pointer-events-auto transition-all duration-300",
+          isMobile 
+            ? "bg-white/40 backdrop-blur-lg border-b border-black/5 rounded-b-[24px]" 
+            : "max-w-7xl mx-auto px-6 lg:px-8 mt-6 bg-transparent border-none"
+        )}
       >
-        <div className="flex w-full max-w-7xl mx-auto items-center justify-between px-2.5 sm:px-6 lg:px-8 h-full">
-          {/* Logo */}
-          <motion.a 
-            href="/" 
-            className="flex items-center"
-            style={{ scale: logoScale }}
-          >
-            <img 
-              src="/logos/nueve-logo.png" 
-              alt="Nueve Logo" 
-              className="h-4 md:h-5 w-auto px-4"
-            />
-          </motion.a>
+        <div className={cn(
+          "flex w-full items-center justify-between h-full",
+          isMobile ? "max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8" : ""
+        )}>
+          {/* Left Side: Logo (Pill on Desktop) */}
+          <div className={cn(
+            "flex items-center transition-all duration-300",
+            !isMobile && "bg-white/40 backdrop-blur-lg border border-black/5 rounded-full px-6 py-3"
+          )}>
+            <motion.a 
+              href="/" 
+              className="flex items-center"
+              style={{ scale: isMobile ? logoScale : 1 }}
+            >
+              <img 
+                src="/logos/nueve-logo.png" 
+                alt="Nueve Logo" 
+                className={cn("h-4 md:h-5 w-auto", isMobile && "px-4")}
+              />
+            </motion.a>
+          </div>
 
-          {/* Right Side: Join Button */}
+          {/* Right Side: Join Button (Pill on Desktop) */}
           <div 
-            className="flex items-center py-2"
+            className={cn(
+              "flex items-center",
+              isMobile && "py-2"
+            )}
           >
             <Button 
               variant="default" 
