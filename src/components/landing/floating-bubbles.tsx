@@ -19,7 +19,7 @@ const logos = [
 ];
 
 export function FloatingBubbles({ className }: { className?: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null!);
 
   return (
     <div 
