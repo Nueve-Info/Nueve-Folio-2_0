@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { motion } from "framer-motion"
 import { HeroBackground } from "./hero-background"
+import { FloatingBubbles } from "./floating-bubbles"
 import { PlaceholderBlock } from "@/components/ui"
 
 export function Hero() {
@@ -25,8 +26,10 @@ export function Hero() {
       <HeroBackground className="bg-transparent" />
       
       <div className="relative z-10 mx-auto max-w-[1440px] px-2.5 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          {/* Badge */}
+        <div className="relative">
+          <FloatingBubbles className="z-20" />
+          <div className="mx-auto max-w-5xl text-center relative z-10">
+            {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -64,7 +67,11 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mx-auto mt-8 max-w-2xl text-lg font-medium text-text-grey sm:text-xl"
           >
-            Online masterclass with mentorship to help you craft a job-winning case valid for the AI era.
+            Online masterclass with mentorship to help you craft a job-winning case valid for the{" "}
+            <span className="relative inline-block whitespace-nowrap px-1">
+              <span className="absolute inset-0 -z-10 translate-y-0.5 -rotate-1 scale-[1.02] rounded bg-gradient-to-r from-brand-orange to-brand-orange-light opacity-20" />
+              <span className="relative z-10 font-bold text-brand-orange">AI era.</span>
+            </span>
           </motion.p>
 
           {/* Alumni avatars */}
@@ -96,6 +103,7 @@ export function Hero() {
               2,900+ Nueve Alumni
             </span>
           </motion.div>
+          </div>
         </div>
 
         {/* Vimeo Video - Moved outside the max-w-4xl container to use full max-w-7xl width */}
