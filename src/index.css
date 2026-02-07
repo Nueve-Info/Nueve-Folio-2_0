@@ -1,0 +1,149 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+@import "@fontsource/plus-jakarta-sans/800.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* Nueve Color Palette */
+  --color-nueve-black: #0C0C0C;
+  --color-nueve-white: #FFFFFF;
+  --color-surface-grey: #EBEBEB;
+  --color-text-grey: #4D4D4D;
+
+  /* Brand Primary */
+  --color-brand-orange: #F8810D;
+  --color-brand-orange-light: #FFB347;
+
+  /* UI Accents */
+  --color-electric-blue: #30A2FF;
+  --color-mint-cyan: #47FFD1;
+  --color-vibrant-yellow: #FAD02C;
+
+  /* Typography */
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+
+  /* Tracking */
+  --letter-spacing-tighter: -0.03em;
+
+  /* Border Radius */
+  --radius-pill: 500px;
+  --radius-card: 8px;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+/* Nueve Light Theme (Default) - #FBFAFA background */
+:root {
+  --radius: 0.5rem;
+  --background: #FBFAFA;
+  --foreground: #0C0C0C;
+  --card: #FFFFFF;
+  --card-foreground: #0C0C0C;
+  --popover: #FFFFFF;
+  --popover-foreground: #0C0C0C;
+  --primary: #F8810D;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EBEBEB;
+  --secondary-foreground: #0C0C0C;
+  --muted: #EBEBEB;
+  --muted-foreground: #4D4D4D;
+  --accent: #EBEBEB;
+  --accent-foreground: #0C0C0C;
+  --destructive: #DC2626;
+  --border: rgba(12, 12, 12, 0.1);
+  --input: rgba(12, 12, 12, 0.1);
+  --ring: #F8810D;
+}
+
+/* Nueve Dark Theme */
+.dark {
+  --background: #0C0C0C;
+  --foreground: #FFFFFF;
+  --card: #0C0C0C;
+  --card-foreground: #FFFFFF;
+  --popover: #0C0C0C;
+  --popover-foreground: #FFFFFF;
+  --primary: #F8810D;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1A1A1A;
+  --secondary-foreground: #FFFFFF;
+  --muted: #1A1A1A;
+  --muted-foreground: #4D4D4D;
+  --accent: #1A1A1A;
+  --accent-foreground: #FFFFFF;
+  --destructive: #DC2626;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #F8810D;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tighter font-black;
+  }
+
+  h1 {
+    @apply text-5xl sm:text-6xl md:text-7xl lg:text-8xl;
+  }
+
+  h2 {
+    @apply text-4xl sm:text-5xl md:text-6xl;
+  }
+
+  h3 {
+    @apply text-3xl sm:text-4xl;
+  }
+
+  h4 {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  h5 {
+    @apply text-xl sm:text-2xl;
+  }
+
+  h6 {
+    @apply text-lg sm:text-xl;
+  }
+}
