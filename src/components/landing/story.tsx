@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { ShieldCheck, Lock } from "lucide-react"
+import { ShieldCheck } from "lucide-react"
 import { Section } from "@/components/ui/section"
 
 export function Story() {

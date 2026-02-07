@@ -1,5 +1,4 @@
 import { Section } from "@/components/ui/section"
-import { BentoGrid, BentoCard } from "@/components/ui/bento-grid"
 
 const logos = [
   "/logos/samsung.png",

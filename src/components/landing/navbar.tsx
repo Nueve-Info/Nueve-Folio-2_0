@@ -1,10 +1,9 @@
 import { useState } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
-import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen] = useState(false)
   const { scrollY } = useScroll()
   
   // Transform values based on scroll position
