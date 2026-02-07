@@ -21,7 +21,7 @@ export function Hero() {
   }, [])
 
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background bg-[radial-gradient(at_40%_0%,rgba(255,179,71,0.12)_0px,transparent_50%),radial-gradient(at_60%_0%,rgba(248,129,13,0.12)_0px,transparent_50%)] pt-32 pb-20 lg:pt-40 lg:pb-24">
+    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background bg-[radial-gradient(at_40%_0%,rgba(255,179,71,0.12)_0px,transparent_50%),radial-gradient(at_60%_0%,rgba(248,129,13,0.12)_0px,transparent_50%)] pt-28 pb-20 lg:pt-36 lg:pb-24">
       {/* Unicorn Studio Embed */}
       <HeroBackground className="bg-transparent" />
       

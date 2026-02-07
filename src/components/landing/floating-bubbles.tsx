@@ -55,8 +55,8 @@ function Bubble({ logo, index, containerRef }: { logo: { src: string; alt: strin
   const randomX = (Math.random() - 0.5) * 15;
   const randomY = (Math.random() - 0.5) * 15;
   
-  const initialX = Math.max(0, Math.min(100, pos.x + randomX));
-  const initialY = Math.max(0, Math.min(100, pos.y + randomY));
+  const initialX = Math.max(5, Math.min(85, pos.x + randomX));
+  const initialY = Math.max(5, Math.min(85, pos.y + randomY));
 
   // Randomize float duration and delay
   const duration = 4 + Math.random() * 2;
