@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { Check, ArrowRight, Zap } from "lucide-react"
+import { Check, ArrowRight } from "lucide-react"
 import { Section } from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
 
