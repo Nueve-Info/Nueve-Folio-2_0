@@ -56,7 +56,7 @@ export function Pricing() {
                     key={index}
                     className="flex items-center gap-4 rounded-xl bg-surface-grey p-4 transition-colors hover:bg-black/5"
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-orange text-white">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-sm shadow-green-500/20">
                       <Check className="h-4 w-4" />
                     </div>
                     <span className="text-lg font-medium text-nueve-black">{feature}</span>
@@ -70,7 +70,7 @@ export function Pricing() {
                   variant="nueve" 
                   size="lg" 
                   rounded="pill" 
-                  className="group w-full bg-nueve-black text-white hover:bg-nueve-black/90"
+                  className="group w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:opacity-90 shadow-lg shadow-green-500/20"
                 >
                   <span className="mr-2">Join Now</span>
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

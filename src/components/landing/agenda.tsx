@@ -1,72 +1,85 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Section } from "@/components/ui/section"
-import { ChevronDown, BookOpen, Search, Sparkles, MessageSquare, Shield } from "lucide-react"
+import { ChevronDown, TrendingUp, Eye, Layers, PenTool, Wand2, Target } from "lucide-react"
 
 const modules = [
   {
     number: 1,
     week: "Week 1",
-    title: "Understand User Behaviors",
-    subtitle: "With 3 proven mental models",
-    icon: BookOpen,
+    title: "Design Job Market 2026",
+    subtitle: "Know the landscape before you enter the arena",
+    icon: TrendingUp,
     accent: "brand-orange",
     details: [
-      "Map cognitive biases that drive user decisions",
-      "Apply the Hook Model to your product flows",
-      "Identify behavioral patterns through real case studies",
+      "Decode hiring trends and in-demand skills shaping 2026",
+      "Understand what separates hired designers from ignored ones",
+      "Reverse-engineer real job postings to know exactly what companies want",
     ],
   },
   {
     number: 2,
-    week: "Week 2–3",
-    title: "Find The Gaps & Improve Any Experience",
-    subtitle: "Know which psychology principle to use and when.",
-    icon: Search,
+    week: "Week 2",
+    title: "Life of a Recruiter",
+    subtitle: "See your portfolio through the eyes of the gatekeeper",
+    icon: Eye,
     accent: "electric-blue",
     details: [
-      "Audit existing UX with a psychology-driven framework",
-      "Match the right principle to the right problem",
-      "Prioritize improvements for maximum impact",
+      "Learn how recruiters scan portfolios in under 60 seconds",
+      "Understand the screening funnel from application to interview",
+      "Avoid the silent killers that get portfolios rejected instantly",
     ],
   },
   {
     number: 3,
-    week: "Week 4",
-    title: "Create Delightful Journeys",
-    subtitle: "Aligned with your business goals",
-    icon: Sparkles,
+    week: "Week 3",
+    title: "Nueve Folio",
+    subtitle: "The framework behind portfolios that land interviews",
+    icon: Layers,
     accent: "mint-cyan",
     details: [
-      "Design end-to-end flows that feel effortless",
-      "Balance delight with conversion at every touchpoint",
-      "Build emotional resonance into product moments",
+      "Master the Nueve Folio structure for maximum impact",
+      "Study real portfolios that got designers hired at top companies",
+      "Learn the storytelling formula that makes case studies stick",
     ],
   },
   {
     number: 4,
-    week: "Week 5",
-    title: "Communicate Product Decisions",
-    subtitle: "To better rally your team & stakeholders",
-    icon: MessageSquare,
+    week: "Week 4",
+    title: "Build Your Folio",
+    subtitle: "From blank page to a portfolio you're proud of",
+    icon: PenTool,
     accent: "vibrant-yellow",
     details: [
-      "Frame design decisions in business language",
-      "Present psychology-backed rationales that stick",
-      "Build alignment across cross-functional teams",
+      "Build and ship your portfolio using the Nueve Folio system",
+      "Write compelling case studies that showcase your thinking",
+      "Get live feedback and iterate until it's interview-ready",
     ],
   },
   {
     number: 5,
     week: "Week 5",
-    title: "Create Ethical & Humane Products",
-    subtitle: "To earn loyal fans & succeed long-term",
-    icon: Shield,
+    title: "AI for Designers",
+    subtitle: "Use AI as your unfair advantage in the job search",
+    icon: Wand2,
     accent: "brand-orange",
     details: [
-      "Draw the line between persuasion and manipulation",
-      "Design for long-term trust and user well-being",
-      "Apply ethical frameworks to real product dilemmas",
+      "Generate portfolio copy, case study drafts, and cover letters with AI",
+      "Use AI tools to speed up visual mockups and presentations",
+      "Stand out by demonstrating AI literacy in your design workflow",
+    ],
+  },
+  {
+    number: 6,
+    week: "Week 6",
+    title: "Searching for a Job",
+    subtitle: "A proven system to land your next design role",
+    icon: Target,
+    accent: "electric-blue",
+    details: [
+      "Build a job search pipeline that actually gets responses",
+      "Craft tailored applications that pass the recruiter filter",
+      "Prepare for interviews with confidence and a winning strategy",
     ],
   },
 ]
@@ -123,12 +136,12 @@ export function Agenda() {
         </div>
 
         <h2 className="text-white">
-          The step-by-step system to apply product psychology
+          The step-by-step system to build a job-winning portfolio
           <span className="text-brand-orange">.</span>
         </h2>
 
         <p className="mx-auto mt-6 max-w-lg text-lg font-medium leading-relaxed text-white/60">
-          In 5 weeks, you'll apply the right psychological principle to improve any product experience.
+          In 6 weeks, you'll go from overlooked applicant to a designer recruiters can't ignore.
         </p>
       </motion.div>
 
@@ -255,7 +268,7 @@ export function Agenda() {
       >
         <div className="h-px w-20 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         <p className="max-w-md text-base font-medium text-white/40">
-          5 modules · 5 weeks · Psychology-driven product design from first principles
+          6 modules · 6 weeks · From market insights to signed offer letter
         </p>
       </motion.div>
     </Section>

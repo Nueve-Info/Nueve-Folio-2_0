@@ -1,11 +1,31 @@
 import { motion } from "framer-motion"
 import { Section } from "@/components/ui/section"
-import { LogoMarkPlaceholder } from "@/components/ui"
+import testimonialImage from "@/assets/Screenshot 2026-02-05 at 16.28.27 1.png"
 
-const logos = Array(12).fill(null).map((_, i) => ({
-  id: i,
-  hasCaseStudy: [0, 4, 6, 10].includes(i),
-}))
+// Import logos from src/logos
+import Accenture from "@/logos/Accenture.svg"
+import Allegro from "@/logos/Allegro.pl_sklep.svg"
+import Behance from "@/logos/behance-3.svg"
+import CocaCola from "@/logos/Coca-Cola-European-Partners.svg"
+import EsteeLauder from "@/logos/estee-lauder.svg"
+import Heineken from "@/logos/Heineken_logo.svg"
+import Mattel from "@/logos/Mattel_Creations.svg"
+import Medium from "@/logos/Medium_(website)_logo.svg"
+import Samsung from "@/logos/Samsung_wordmark.svg"
+import Vans from "@/logos/Vans_(brand)_logo.svg"
+
+const logos = [
+  { src: Samsung, alt: "Samsung", color: "#1428a0" },
+  { src: Medium, alt: "Medium", color: "#000000" },
+  { src: Allegro, alt: "Allegro", color: "#ff5a00" },
+  { src: Accenture, alt: "Accenture", color: "#a100ff" },
+  { src: Behance, alt: "Behance", color: "#0057ff" },
+  { src: Mattel, alt: "Mattel", color: "#e4002b" },
+  { src: CocaCola, alt: "Coca Cola", color: "#f40009" },
+  { src: EsteeLauder, alt: "Estee Lauder", color: "#002d5d" },
+  { src: Heineken, alt: "Heineken", color: "#217121" },
+  { src: Vans, alt: "Vans", color: "#ba0c2f" },
+]
 
 export function SocialProof() {
   return (
@@ -18,33 +38,27 @@ export function SocialProof() {
         className="text-center"
       >
         <div className="flex flex-col items-center justify-center gap-4">
-          <div className="flex -space-x-3">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="h-10 w-10 rounded-full border-2 border-white bg-gradient-to-br from-brand-orange to-brand-orange-light shadow-sm"
-              />
-            ))}
+          <div className="h-16 w-16 overflow-hidden rounded-full border-2 border-white shadow-sm">
+            <img 
+              src={testimonialImage} 
+              alt="Slawek Kozik" 
+              className="h-full w-full object-cover"
+            />
           </div>
-          <p className="text-lg font-medium text-nueve-black md:text-xl">
-            Kamil Grzaba <span className="text-text-grey">|</span> Senior Designer at Stampli
-          </p>
-          <p className="text-sm text-text-grey">
-            Joined by 2,900+ alumni
+          <p className="text-lg font-medium text-nueve-black md:text-xl max-w-2xl">
+            "Nueve Folio changed my career and helped me land my dream role."<br></br><span className="text-brand-orange">Slavo | Product Designer | Santander Bank</span>
           </p>
         </div>
 
         {/* Logos row */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3 md:mt-12 md:gap-4 lg:gap-6">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-6 md:mt-12 md:gap-8 lg:gap-12">
           {logos.map((logo, index) => (
-            <div key={index} className="group relative flex items-center gap-1 md:gap-2">
-              <LogoMarkPlaceholder className="h-8 w-24 bg-surface-grey/50 transition-colors group-hover:bg-surface-grey" />
-              
-              {logo.hasCaseStudy && (
-                <span className="absolute -right-2 -top-2 hidden h-4 items-center rounded-full bg-brand-orange px-1.5 text-[9px] font-bold uppercase tracking-wide text-white shadow-sm transition-transform group-hover:scale-110 sm:flex">
-                  Case Study
-                </span>
-              )}
+            <div key={index} className="group relative flex items-center justify-center">
+              <img
+                src={logo.src}
+                alt={logo.alt}
+                className="h-6 md:h-8 lg:h-9 w-auto object-contain opacity-40 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 hover:scale-110"
+              />
             </div>
           ))}
         </div>

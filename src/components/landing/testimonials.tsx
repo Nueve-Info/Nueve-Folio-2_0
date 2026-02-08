@@ -44,7 +44,7 @@ export function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-surface-grey/30 rounded-2xl p-6 border border-black/5 hover:border-brand-orange/30 transition-all flex flex-col"
+              className="bg-surface-grey/30 rounded-2xl p-6 border border-black/5 shadow-sm hover:border-brand-orange/30 transition-all flex flex-col"
             >
               <div className="flex items-center gap-3 mb-4">
                 {t.avatar ? (

@@ -73,29 +73,37 @@ function Bubble({ logo, index, containerRef }: { logo: { src: string; alt: strin
       animate={{ 
         opacity: 1, 
         scale: 1,
-        y: [0, -15, 0], // Float up and down
       }}
       transition={{
         opacity: { duration: 0.5, delay },
         scale: { duration: 0.5, delay },
-        y: {
-          duration: duration,
-          repeat: Infinity,
-          ease: "easeInOut",
-          repeatType: "reverse",
-          delay: delay
-        }
       }}
       className="absolute pointer-events-auto"
     >
-      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-sm shadow-lg ring-1 ring-black/5 transition-colors hover:bg-white/20">
-        <img 
-          src={logo.src} 
-          alt={logo.alt} 
-          className="h-7 w-7 object-contain" 
-          draggable={false}
-        />
-      </div>
+      {/* Inner motion div for floating animation to avoid conflict with drag */}
+      <motion.div
+        animate={{ 
+          y: [0, -15, 0], // Float up and down
+        }}
+        transition={{
+          y: {
+            duration: duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+            repeatType: "reverse",
+            delay: delay
+          }
+        }}
+      >
+        <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-sm shadow-lg ring-1 ring-black/5 transition-colors hover:bg-white/20">
+          <img 
+            src={logo.src} 
+            alt={logo.alt} 
+            className="h-7 w-7 object-contain" 
+            draggable={false}
+          />
+        </div>
+      </motion.div>
     </motion.div>
   );
 }

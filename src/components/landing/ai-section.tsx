@@ -2,7 +2,17 @@ import { motion } from "framer-motion"
 import { Sparkles } from "lucide-react"
 import { Section } from "@/components/ui/section"
 
+import FigmaLogo from "@/Bubble/Figma-logo.svg"
+import ClaudeLogo from "@/Bubble/Claude_AI_symbol.svg"
+import VercelLogo from "@/Bubble/vercel-icon-svgrepo-com.svg"
+
 export function AiSection() {
+  const logos = [
+    { src: FigmaLogo, alt: "Figma" },
+    { src: ClaudeLogo, alt: "Claude AI" },
+    { src: VercelLogo, alt: "Vercel" },
+  ]
+
   return (
     <Section id="ai" className="bg-white py-20 lg:py-32">
       <motion.div
@@ -10,7 +20,7 @@ export function AiSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="rounded-[2.5rem] bg-surface-grey/50 p-8 md:p-12 lg:p-24"
+        className="rounded-[2.5rem] border border-black/5 bg-surface-grey/30 p-8 shadow-sm md:p-12 lg:p-24"
       >
         <div className="flex flex-col items-center text-center">
           <div className="mb-8 inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 shadow-sm">
@@ -31,16 +41,21 @@ export function AiSection() {
           <div className="relative mt-16 flex h-40 w-full max-w-2xl items-center justify-center gap-4 sm:gap-8 md:mt-24">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand-orange/5 to-transparent blur-2xl" />
             
-            {[1, 2, 3].map((i) => (
+            {logos.map((logo, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.8, y: 20 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="relative aspect-square h-24 rounded-2xl border border-white bg-white shadow-xl sm:h-32 md:h-40"
+                className="relative flex aspect-square h-24 items-center justify-center rounded-2xl border border-white bg-white p-6 shadow-xl sm:h-32 sm:p-8 md:h-40 md:p-10"
               >
                 <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br from-surface-grey to-white opacity-50`} />
-                {i === 2 && (
+                <img 
+                  src={logo.src} 
+                  alt={logo.alt} 
+                  className="relative h-full w-full object-contain transition-all duration-300"
+                />
+                {i === 1 && (
                   <div className="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-brand-orange text-white shadow-lg">
                     <Sparkles className="h-4 w-4" />
                   </div>

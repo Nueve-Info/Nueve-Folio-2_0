@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { Section } from "@/components/ui/section"
 import { Quote } from "lucide-react"
+import testimonialImage from "@/assets/Screenshot 2026-02-05 at 16.28.27 1.png"
 
 export function FeaturedTestimonial() {
   return (
@@ -10,7 +11,7 @@ export function FeaturedTestimonial() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative overflow-hidden rounded-[2rem] bg-surface-grey p-8 md:p-12 lg:p-20"
+        className="relative overflow-hidden rounded-2xl border border-black/5 bg-surface-grey/30 p-8 md:p-12 lg:p-20"
       >
         {/* Background Accent */}
         <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-orange/10 blur-[100px]" />
@@ -21,9 +22,9 @@ export function FeaturedTestimonial() {
             <div className="absolute -inset-2 rounded-2xl bg-brand-orange/20 opacity-20 blur-sm" />
             <div className="relative h-64 w-48 overflow-hidden rounded-2xl border border-nueve-black/5 bg-white md:h-80 md:w-60 lg:h-[400px] lg:w-[300px]">
               <img 
-                src="/avatars/alumni-3.png" 
+                src={testimonialImage} 
                 alt="Slawek Kozik" 
-                className="h-full w-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                className="h-full w-full object-cover transition-all duration-500"
               />
             </div>
           </div>
