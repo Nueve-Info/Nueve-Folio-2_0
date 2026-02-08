@@ -1,34 +1,44 @@
 import { Section } from "@/components/ui/section"
 
+// Import logos from src/logos
+import Accenture from "@/logos/Accenture.svg"
+import Allegro from "@/logos/Allegro.pl_sklep.svg"
+import Behance from "@/logos/behance-3.svg"
+import CocaCola from "@/logos/Coca-Cola-European-Partners.svg"
+import EsteeLauder from "@/logos/estee-lauder.svg"
+import Heineken from "@/logos/Heineken_logo.svg"
+import Mattel from "@/logos/Mattel_Creations.svg"
+import Medium from "@/logos/Medium_(website)_logo.svg"
+import Samsung from "@/logos/Samsung_wordmark.svg"
+import Vans from "@/logos/Vans_(brand)_logo.svg"
+
 const logos = [
-  "/logos/samsung.png",
-  "/logos/medium.png",
-  "/logos/allegro.png",
-  "/logos/accenture.png",
-  "/logos/behance.png",
-  "/logos/mattel.png",
-  "/logos/comarch.png",
-  "/logos/agh.png",
-  "/logos/vans.png",
-  "/logos/heineken.png",
-  "/logos/estee-lauder.png",
+  { src: Samsung, alt: "Samsung", color: "#1428a0" },
+  { src: Medium, alt: "Medium", color: "#000000" },
+  { src: Allegro, alt: "Allegro", color: "#ff5a00" },
+  { src: Accenture, alt: "Accenture", color: "#a100ff" },
+  { src: Behance, alt: "Behance", color: "#0057ff" },
+  { src: Mattel, alt: "Mattel", color: "#e4002b" },
+  { src: CocaCola, alt: "Coca Cola", color: "#f40009" },
+  { src: EsteeLauder, alt: "Estee Lauder", color: "#002d5d" },
+  { src: Heineken, alt: "Heineken", color: "#217121" },
+  { src: Vans, alt: "Vans", color: "#ba0c2f" },
 ]
 
 export function Logos() {
   return (
-    <Section id="logos" className="bg-transparent pt-0 pb-12 md:pb-16 lg:pb-20">
-      <div className="overflow-hidden rounded-2xl border border-white/10 backdrop-blur-md p-8 md:p-12 lg:p-16">
-        <div className="grid grid-cols-4 items-center gap-x-4 gap-y-8 sm:grid-cols-6 sm:gap-x-6 md:gap-y-10 lg:grid-cols-8 lg:gap-x-8">
-          {logos.map((logo, index) => (
-            <div key={index} className="flex justify-center">
-              <img
-                src={logo}
-                alt={`Logo ${index}`}
-                className="h-6 md:h-8 w-auto object-contain brightness-0 invert opacity-40 hover:opacity-100 hover:scale-105 transition-all duration-300 cursor-pointer"
-              />
-            </div>
-          ))}
-        </div>
+    <Section id="logos" className="bg-transparent py-0">
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-8 sm:gap-x-6 lg:gap-x-12">
+        {logos.map((logo, index) => (
+          <div key={index} className="flex justify-center group w-[calc(25%-1rem)] sm:w-[calc(16.66%-1.5rem)] lg:w-[calc(10%-3rem)]">
+            <img
+              src={logo.src}
+              alt={logo.alt}
+              style={{ "--brand-color": logo.color } as React.CSSProperties}
+                className="h-8 md:h-10 lg:h-12 w-auto object-contain hover:scale-110 transition-all duration-500 cursor-pointer"
+            />
+          </div>
+        ))}
       </div>
     </Section>
   )

@@ -1,13 +1,35 @@
 import { useRef, useState } from "react"
 import { motion, useScroll, useMotionValueEvent, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { Eye, Layout, Sparkles, ArrowRight, Zap } from "lucide-react"
+import placeholderImg from "@/assets/d85c72c9-bc8a-4dde-9816-7f085e3a7350-1672145030684-pfarm-with-png-watermarked 1.png"
 
 const statements = [
-  "Recruiters spend 6 seconds scanning your portfolio.",
-  "Basic Case Studies with wireframes and personas won't cut it.",
-  "You have to stand out.",
-  "We'll show you how.",
-  "Fast and easy with AI.",
+  {
+    text: "Recruiters spend 6&nbsp;seconds scanning your portfolio.",
+    Icon: Eye,
+    insertAfter: "spend",
+  },
+  {
+    text: "Basic Case Studies with wireframes and personas won't cut it.",
+    Icon: Layout,
+    insertAfter: "Studies",
+  },
+  {
+    text: "You have to stand out.",
+    Icon: Sparkles,
+    insertAfter: "stand",
+  },
+  {
+    text: "We'll show you how.",
+    Icon: ArrowRight,
+    insertAfter: "show",
+  },
+  {
+    text: "Fast and easy with AI.",
+    Icon: Zap,
+    insertAfter: "easy",
+  },
 ]
 
 type StatementState = "before" | "active" | "after"
@@ -17,12 +39,35 @@ const transitionConfig = {
   ease: [0.22, 1, 0.36, 1] as const,
 }
 
+function BubbleIcon({ Icon, state }: { Icon: any, state: StatementState }) {
+  return (
+    <span className="relative inline-flex items-center justify-center w-[1.15em] h-[1.15em] rounded-full border border-white/20 bg-white/10 backdrop-blur-sm shadow-lg ring-1 ring-black/5 transition-all duration-300 hover:bg-white/20 hover:scale-110 mx-[0.25em] align-middle -translate-y-[0.1em] overflow-hidden">
+      <Icon className="w-[0.65em] h-[0.65em] text-brand-orange drop-shadow-sm relative z-10" strokeWidth={3} />
+      
+      {/* Shine effect */}
+      <motion.span
+        initial={{ x: "-100%" }}
+        animate={state === "active" ? { x: "200%" } : { x: "-100%" }}
+        transition={{ 
+          duration: 1.2, 
+          ease: "easeInOut",
+          delay: 0.2,
+          repeat: 0
+        }}
+        className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/90 to-transparent -skew-x-12 pointer-events-none z-20"
+      />
+    </span>
+  )
+}
+
 function ScrollStatement({
-  text,
+  statement,
   state,
+  index,
 }: {
-  text: string
+  statement: typeof statements[0]
   state: StatementState
+  index: number
 }) {
   const variants = {
     before: {
@@ -45,23 +90,59 @@ function ScrollStatement({
     },
   }
 
+  const renderTextWithIcon = () => {
+    const parts = statement.text.split(statement.insertAfter)
+    if (parts.length < 2) return <span dangerouslySetInnerHTML={{ __html: statement.text }} />
+
+    return (
+      <>
+        <span dangerouslySetInnerHTML={{ __html: parts[0] }} />
+        {statement.insertAfter}
+        <BubbleIcon Icon={statement.Icon} state={state} />
+        <span dangerouslySetInnerHTML={{ __html: parts.slice(1).join(statement.insertAfter) }} />
+      </>
+    )
+  }
+
   return (
-    <motion.p
+    <motion.div
       initial="before"
       animate={state}
       variants={variants}
       transition={transitionConfig}
-      className="absolute inset-0 flex items-center justify-center px-2.5 sm:px-6 text-center text-3xl font-black tracking-tight text-nueve-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
+      className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6"
     >
-      {text}
-    </motion.p>
+      <div className="w-full max-w-5xl">
+        <p className="text-center text-4xl font-black tracking-tighter leading-[1.15] text-nueve-black sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl 2xl:text-8xl mb-10 sm:mb-14 lg:mb-16">
+          {renderTextWithIcon()}
+        </p>
+        <div className="w-full aspect-video rounded-2xl overflow-hidden">
+          {index === 0 ? (
+            <iframe
+              title="vimeo-player"
+              src="https://player.vimeo.com/video/1152835057?h=86e7a358a2&autoplay=1&muted=1&loop=1"
+              className="w-full h-full"
+              frameBorder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              allowFullScreen
+            />
+          ) : (
+            <img 
+              src={placeholderImg} 
+              alt="Problem illustration" 
+              className="w-full h-full object-contain"
+            />
+          )}
+        </div>
+      </div>
+    </motion.div>
   )
 }
 
 export function Problem() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [activeIndex, setActiveIndex] = useState(-1)
-  const activeIndexRef = useRef(-1)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const activeIndexRef = useRef(0)
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -81,7 +162,7 @@ export function Problem() {
   useMotionValueEvent(scrollYProgress, "change", (progress) => {
     const segmentSize = 1 / statements.length
     const newIndex = Math.floor(progress / segmentSize)
-    const clampedIndex = progress <= 0 ? -1 : Math.min(newIndex, statements.length - 1)
+    const clampedIndex = progress <= 0 ? 0 : Math.min(newIndex, statements.length - 1)
 
     if (clampedIndex !== activeIndexRef.current) {
       activeIndexRef.current = clampedIndex
@@ -99,7 +180,7 @@ export function Problem() {
     <div ref={containerRef} className="relative" style={{ height: `${statements.length * 100}vh` }}>
       <div
         id="problem"
-        className="sticky top-0 flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-white"
+        className="sticky top-0 flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-background"
       >
         {/* Radial Gradient Background — outer resets on paragraph change, inner drifts with scroll */}
         <motion.div
@@ -119,11 +200,12 @@ export function Problem() {
         </motion.div>
 
         {/* Statements container */}
-        <div className="relative h-32 w-full max-w-6xl sm:h-40 md:h-48 lg:h-56">
+        <div className="relative h-[60vh] md:h-[80vh] w-full max-w-6xl">
           {statements.map((statement, index) => (
             <ScrollStatement
               key={index}
-              text={statement}
+              index={index}
+              statement={statement}
               state={getStatementState(index)}
             />
           ))}
@@ -150,3 +232,4 @@ export function Problem() {
     </div>
   )
 }
+

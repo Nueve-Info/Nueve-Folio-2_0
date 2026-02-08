@@ -1,6 +1,5 @@
 import { motion } from "framer-motion"
 import { Section } from "@/components/ui/section"
-import { PlaceholderBlock } from "@/components/ui"
 
 export function Insights() {
   return (
@@ -13,19 +12,28 @@ export function Insights() {
         className="rounded-2xl border border-black/5 bg-surface-grey/30 p-6 md:p-10 lg:p-16"
       >
         <h2 className="mb-8 text-center text-nueve-black md:mb-12">
-          Apply unique insights from 9,000+ portfolios
+          Apply unique insights from{" "}
+          <span className="relative z-0 inline-block whitespace-nowrap px-2">
+            <span className="absolute inset-0 -z-10 translate-y-0.5 -rotate-2 scale-[1.05] rounded-lg bg-gradient-to-r from-brand-orange to-brand-orange-light" />
+            <span className="relative z-10 text-white">9,000+</span>
+          </span>{" "}
+          portfolios
         </h2>
         
-        {/* Insights placeholder */}
-        <PlaceholderBlock className="mx-auto aspect-[4/3] max-w-4xl bg-white shadow-sm md:aspect-[2/1]">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="grid grid-cols-3 gap-4 p-8 opacity-40 blur-[1px] grayscale">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="aspect-[3/4] w-32 rounded-lg bg-surface-grey shadow-inner" />
-              ))}
-            </div>
-          </div>
-        </PlaceholderBlock>
+        {/* Vimeo video */}
+        <div className="relative overflow-hidden rounded-lg border border-black/5 mx-auto aspect-[4/3] max-w-4xl bg-white shadow-sm md:aspect-[2/1]">
+          <iframe
+            title="vimeo-player"
+            src="https://player.vimeo.com/video/1152835057?h=86e7a358a2&autoplay=1&muted=1&loop=1"
+            width="640"
+            height="360"
+            frameBorder="0"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+            allowFullScreen
+            className="absolute inset-0 h-full w-full"
+          />
+        </div>
       </motion.div>
     </Section>
   )

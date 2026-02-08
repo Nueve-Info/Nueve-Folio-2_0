@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
-import { MessageSquare, Star } from "lucide-react"
+import { MessageSquare } from "lucide-react"
 import { Section } from "@/components/ui/section"
+import MentorAvatar from "@/assets/mentor-avatar.png"
 
 export function MentorSection() {
   return (
@@ -10,7 +11,7 @@ export function MentorSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative overflow-hidden rounded-[2.5rem] bg-surface-grey p-8 md:p-12 lg:p-24"
+        className="relative overflow-hidden rounded-[2.5rem] border border-black/5 bg-surface-grey/30 p-8 shadow-sm md:p-12 lg:p-24"
       >
         {/* Decorative Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]" />
@@ -34,12 +35,7 @@ export function MentorSection() {
               Get unstuck instantly. Whether it's a portfolio review, career advice, or technical help, expert guidance is just a message away.
             </p>
 
-            <div className="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
-               {[1, 2, 3, 4, 5].map((i) => (
-                 <Star key={i} className="h-6 w-6 fill-brand-orange text-brand-orange" />
-               ))}
-               <span className="ml-2 text-lg font-bold text-nueve-black">5.0/5 Rating</span>
-            </div>
+
           </div>
 
           {/* Chat Interface Mockup */}
@@ -56,9 +52,9 @@ export function MentorSection() {
                    <div className="rounded-2xl rounded-tr-none bg-brand-orange p-4">
                      <p className="text-sm font-medium text-white">Looking solid! Just move the problem statement higher.</p>
                    </div>
-                   <div className="h-10 w-10 rounded-full bg-white block overflow-hidden">
-                     <img src="/avatars/alumni-3.png" alt="Mentor" className="h-full w-full object-cover" />
-                   </div>
+                  <div className="h-10 w-10 rounded-full bg-white block overflow-hidden">
+                    <img src={MentorAvatar} alt="Mentor" className="h-full w-full object-cover" />
+                  </div>
                  </div>
                </div>
                
