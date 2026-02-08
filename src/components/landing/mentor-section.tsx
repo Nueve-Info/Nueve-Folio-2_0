@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { MessageSquare, Star } from "lucide-react"
+import { MessageSquare } from "lucide-react"
 import { Section } from "@/components/ui/section"
 import MentorAvatar from "@/assets/mentor-avatar.png"
 
