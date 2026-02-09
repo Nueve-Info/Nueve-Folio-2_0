@@ -24,7 +24,18 @@ export function ShipCta() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-8 md:mt-10"
         >
-          <Button variant="default" size="lg" rounded="pill" className="bg-brand-orange text-nueve-black hover:bg-brand-orange/90 font-bold px-8 py-6 text-lg">
+          <Button 
+            variant="default" 
+            size="lg" 
+            rounded="pill" 
+            className="bg-brand-orange text-nueve-black hover:bg-brand-orange/90 font-bold px-8 py-6 text-lg"
+            onClick={() => {
+              const element = document.getElementById('pricing');
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+          >
             Join Nueve Folio 2.0
           </Button>
         </motion.div>

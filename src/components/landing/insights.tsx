@@ -9,7 +9,7 @@ export function Insights() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.5 }}
-        className="rounded-2xl border border-black/5 bg-surface-grey/30 p-6 md:p-10 lg:p-16"
+        className="p-6 md:p-10 lg:p-16"
       >
         <h2 className="mb-8 text-center text-nueve-black md:mb-12">
           Apply unique insights from{" "}
@@ -19,12 +19,17 @@ export function Insights() {
           </span>{" "}
           portfolios
         </h2>
+
+        <p className="mx-auto mb-10 max-w-2xl text-center text-base text-nueve-black/60 md:mb-14 md:text-lg">
+          We've analyzed thousands of real-world portfolios to uncover what
+          actually gets designers hired, so you can build a portfolio that stands out from day one.
+        </p>
         
         {/* Vimeo video */}
         <div className="relative overflow-hidden rounded-lg border border-black/5 mx-auto aspect-[4/3] max-w-4xl bg-white shadow-sm md:aspect-[2/1]">
           <iframe
             title="vimeo-player"
-            src="https://player.vimeo.com/video/1152835057?h=86e7a358a2&autoplay=1&muted=1&loop=1"
+            src="https://player.vimeo.com/video/1152835057?h=86e7a358a2&autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0&badge=0"
             width="640"
             height="360"
             frameBorder="0"

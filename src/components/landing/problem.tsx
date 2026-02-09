@@ -1,7 +1,9 @@
 import { useRef, useState } from "react"
 import { motion, useScroll, useMotionValueEvent, useTransform } from "framer-motion"
+import type { MotionValue } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Eye, Layout, Sparkles, ArrowRight, Zap } from "lucide-react"
+import { EyeSequence } from "./eye-sequence"
 
 
 const statements = [
@@ -41,7 +43,7 @@ const transitionConfig = {
 
 function BubbleIcon({ Icon, state }: { Icon: any, state: StatementState }) {
   return (
-    <span className="relative inline-flex items-center justify-center w-[1.15em] h-[1.15em] rounded-full border border-white/20 bg-white/10 backdrop-blur-sm shadow-lg ring-1 ring-black/5 transition-all duration-300 hover:bg-white/20 hover:scale-110 mx-[0.25em] align-middle -translate-y-[0.1em] overflow-hidden">
+    <span className="relative inline-flex items-center justify-center w-[1.15em] h-[1.15em] rounded-full border border-white/20 bg-white/20 backdrop-blur-xl shadow-lg ring-1 ring-black/5 transition-all duration-300 hover:bg-white/30 hover:scale-110 mx-[0.25em] align-middle -translate-y-[0.1em] overflow-hidden">
       <Icon className="w-[0.65em] h-[0.65em] text-brand-orange drop-shadow-sm relative z-10" strokeWidth={3} />
       
       {/* Shine effect */}
@@ -64,10 +66,12 @@ function ScrollStatement({
   statement,
   state,
   index,
+  eyeProgress,
 }: {
   statement: typeof statements[0]
   state: StatementState
   index: number
+  eyeProgress?: MotionValue<number>
 }) {
   const variants = {
     before: {
@@ -110,26 +114,17 @@ function ScrollStatement({
       animate={state}
       variants={variants}
       transition={transitionConfig}
-      className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6"
+      className={`absolute inset-0 flex flex-col items-center px-4 sm:px-6 ${index === 0 ? "justify-start pt-[4vh] sm:pt-[25vh]" : "justify-center"}`}
     >
       <div className="w-full max-w-5xl">
-        <p className="text-center text-5xl font-black tracking-tighter leading-[1.15] text-nueve-black sm:text-6xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl mb-14 sm:mb-16 lg:mb-16">
+        <p className="relative sm:z-10 text-center text-5xl font-black tracking-tighter leading-[1.15] text-nueve-black sm:text-6xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl mb-6 sm:mb-8 lg:mb-8">
           {renderTextWithIcon()}
         </p>
-        <div className="w-full md:w-[85%] lg:w-[80%] mx-auto aspect-video rounded-2xl overflow-hidden">
-          <iframe
-            title="vimeo-player"
-            src={index === 0
-              ? "https://player.vimeo.com/video/1152835057?h=86e7a358a2&autoplay=1&muted=1&loop=1"
-              : "https://player.vimeo.com/video/1140418453?h=0729acb1d9"
-            }
-            className="w-full h-full"
-            frameBorder="0"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-            allowFullScreen
-          />
-        </div>
+        {index === 0 && eyeProgress && (
+          <div className="relative sm:z-0 w-full md:w-[85%] lg:w-[80%] mx-auto overflow-hidden flex items-center justify-center sm:-mt-72 lg:-mt-96">
+            <EyeSequence progress={eyeProgress} className="max-w-full" />
+          </div>
+        )}
       </div>
     </motion.div>
   )
@@ -143,6 +138,12 @@ export function Problem() {
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
+  })
+
+  // Eye sequence: first-segment local progress (0–1) scrubs the full frame range
+  const eyeProgress = useTransform(scrollYProgress, (p) => {
+    const segmentSize = 1 / statements.length
+    return Math.max(0, Math.min(1, p / segmentSize))
   })
 
   // Parallax: compute local progress within current segment (0–1) → small Y drift
@@ -184,7 +185,7 @@ export function Problem() {
           initial={{ scale: 1.1, opacity: 0.4 }}
           animate={{ scale: 1, opacity: 0.8 }}
           transition={transitionConfig}
-          className="absolute right-[-5%] top-1/2 -translate-y-1/2 pointer-events-none"
+          className="absolute right-[-5%] top-1/2 -translate-y-1/2 pointer-events-none z-[1]"
         >
           <motion.div
             style={{ y: parallaxY }}
@@ -196,13 +197,14 @@ export function Problem() {
         </motion.div>
 
         {/* Statements container */}
-        <div className="relative h-[60vh] md:h-[80vh] w-full max-w-6xl">
+        <div className="relative z-[2] h-[60vh] md:h-[80vh] w-full max-w-6xl">
           {statements.map((statement, index) => (
             <ScrollStatement
               key={index}
               index={index}
               statement={statement}
               state={getStatementState(index)}
+              eyeProgress={index === 0 ? eyeProgress : undefined}
             />
           ))}
         </div>
@@ -213,13 +215,19 @@ export function Problem() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="absolute bottom-8 md:bottom-12"
+          className="absolute bottom-8 md:bottom-12 z-[2]"
         >
           <Button
             variant="default"
             size="lg"
             rounded="pill"
             className="bg-gradient-to-r from-brand-orange to-brand-orange-light text-white font-bold hover:opacity-90 transition-opacity"
+            onClick={() => {
+              const element = document.getElementById('pricing');
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
           >
             Join Nueve Folio 2.0
           </Button>

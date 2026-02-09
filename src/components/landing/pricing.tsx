@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 import { Check, ArrowRight } from "lucide-react"
 import { Section } from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
+import { trackMeta, capturePosthog } from "@/lib/analytics"
 
 const features = [
   "24/7 mentor access — portfolio, career & technical help",
@@ -44,12 +45,12 @@ export function Pricing() {
               {/* Price */}
               <div className="mb-10 flex flex-col items-center justify-center gap-2 border-y border-black/5 py-8">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-6xl font-black text-nueve-black md:text-7xl">$17</span>
+                  <span className="text-6xl font-black text-brand-orange md:text-7xl">$17</span>
                   <span className="text-xl font-medium text-text-grey/50">/ one-time</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm font-medium">
-                   <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                   <span className="text-red-500">Early bird ends Feb 06</span>
+                   <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                   <span className="text-green-500">Early bird ends Feb 16</span>
                 </div>
               </div>
 
@@ -72,13 +73,26 @@ export function Pricing() {
                   variant="nueve" 
                   size="lg" 
                   rounded="pill" 
-                  className="group w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:opacity-90 shadow-lg shadow-green-500/20"
+                  className="group w-full bg-green-500 text-white hover:opacity-90 shadow-lg shadow-green-500/20"
+                  data-meta-event="InitiateCheckout"
+                  onClick={() => {
+                    trackMeta("InitiateCheckout", {
+                      content_name: "Nueve Folio 2.0",
+                      value: 17,
+                      currency: "USD",
+                    })
+                    capturePosthog("InitiateCheckout", {
+                      label: "Join Now",
+                      path: window.location.pathname,
+                    })
+                    window.open("https://buy.stripe.com/5kQ00idvZ3SX5wlgBMgA81G", "_blank")
+                  }}
                 >
                   <span className="mr-2">Join Now</span>
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
                 <p className="mt-4 text-center text-xs font-medium uppercase tracking-wider text-text-grey/40">
-                  Program Starts: Feb 28
+                  Program Starts: Feb 16
                 </p>
               </div>
             </div>
