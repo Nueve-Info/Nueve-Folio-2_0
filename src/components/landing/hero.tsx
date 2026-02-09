@@ -2,8 +2,6 @@ import { useEffect } from "react"
 import { motion } from "framer-motion"
 import { HeroBackground } from "./hero-background"
 import { FloatingBubbles } from "./floating-bubbles"
-import { PlaceholderBlock } from "@/components/ui"
-
 export function Hero() {
   useEffect(() => {
     // Load Vimeo player script
@@ -106,17 +104,22 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Vimeo Video - Moved outside the max-w-4xl container to use full max-w-7xl width */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-16"
         >
-          <PlaceholderBlock
-            className="mx-auto aspect-video w-full rounded-2xl shadow-2xl ring-1 ring-gray-900/10"
-            videoUrl="https://player.vimeo.com/video/1160304896"
-          />
+          <div className="mx-auto aspect-video w-full overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gray-900/10">
+            <iframe
+              src="https://player.vimeo.com/video/1163267877?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
+              className="h-full w-full"
+              frameBorder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              title="Hero_trimed"
+            ></iframe>
+          </div>
         </motion.div>
       </div>
     </section>

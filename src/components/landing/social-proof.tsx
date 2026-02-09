@@ -1,6 +1,6 @@
 import { motion } from "framer-motion"
 import { Section } from "@/components/ui/section"
-import testimonialImage from "@/assets/Screenshot 2026-02-05 at 16.28.27 1.png"
+import testimonialImage from "@/assets/girl.png"
 
 // Import logos from src/logos
 import Accenture from "@/logos/Accenture.svg"
@@ -46,7 +46,7 @@ export function SocialProof() {
             />
           </div>
           <p className="text-lg font-medium text-nueve-black md:text-xl max-w-2xl">
-            "Nueve Folio changed my career and helped me land my dream role."<br></br><span className="text-brand-orange">Slavo | Product Designer | Santander Bank</span>
+            "Nueve Folio changed my career and helped me land my dream role."<br></br><span className="text-brand-orange">Margaret | Design Lead | SemHub</span>
           </p>
         </div>
 

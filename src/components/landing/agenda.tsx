@@ -1,7 +1,20 @@
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect } from "react"
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion"
 import { Section } from "@/components/ui/section"
 import { ChevronDown, TrendingUp, Eye, Layers, PenTool, Wand2, Target } from "lucide-react"
+
+const moduleVimeoIds: Record<number, string> = {
+  1: "1163285260",
+  2: "1163285474",
+  3: "1163285765",
+  4: "1163285937",
+  5: "1163286170",
+  6: "1163284876",
+}
+
+function getVimeoEmbedUrl(id: string) {
+  return `https://player.vimeo.com/video/${id}?dnt=1&title=0&byline=0&portrait=0`
+}
 
 const modules = [
   {
@@ -113,13 +126,75 @@ const accentColorMap: Record<string, { bg: string; text: string; border: string;
 
 export function Agenda() {
   const [expandedModule, setExpandedModule] = useState<number | null>(null)
+  const [isHovering, setIsHovering] = useState(false)
+  
+  const mouseX = useMotionValue(-100)
+  const mouseY = useMotionValue(-100)
+
+  // Smooth out the movement
+  const springConfig = { damping: 25, stiffness: 250 }
+  const cursorX = useSpring(mouseX, springConfig)
+  const cursorY = useSpring(mouseY, springConfig)
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX)
+      mouseY.set(e.clientY)
+    }
+
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
+  }, [mouseX, mouseY])
 
   const toggleModule = (moduleNumber: number) => {
     setExpandedModule(expandedModule === moduleNumber ? null : moduleNumber)
   }
 
   return (
-    <Section id="agenda" className="bg-nueve-black py-20 lg:py-32" style={{ cursor: "url('/custom-cursor.png') 16 16, auto" }}>
+    <Section
+      id="agenda"
+      className="relative bg-nueve-black py-20 lg:py-32 overflow-hidden"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      style={{ cursor: isHovering ? 'none' : 'auto' }}
+    >
+      {/* Spinning Custom Cursor */}
+      <AnimatePresence>
+        {isHovering && (
+          <motion.div
+            className="pointer-events-none fixed left-0 top-0 z-[9999] h-12 w-12"
+            style={{
+              x: cursorX,
+              y: cursorY,
+              translateX: "-50%",
+              translateY: "-50%",
+            }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ 
+              opacity: 1, 
+              scale: 1,
+              rotate: 360 
+            }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{
+              rotate: {
+                repeat: Infinity,
+                duration: 3,
+                ease: "linear"
+              },
+              scale: { duration: 0.2 },
+              opacity: { duration: 0.2 }
+            }}
+          >
+            <img 
+              src="/custom-cursor.png" 
+              alt="Custom Cursor" 
+              className="h-full w-full rounded-full object-cover"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -239,15 +314,19 @@ export function Agenda() {
                           </ul>
                         </div>
 
-                        {/* Placeholder visual */}
-                        <div className="flex w-full shrink-0 items-center justify-center rounded-lg border border-white/5 bg-white/5 p-8 md:w-72">
-                          <div className="flex flex-col items-center gap-3 text-center">
-                            <Icon className={`h-12 w-12 ${colors.text} opacity-40`} strokeWidth={1} />
-                            <div className="space-y-2">
-                              <div className="mx-auto h-2 w-24 rounded-full bg-white/5" />
-                              <div className="mx-auto h-2 w-16 rounded-full bg-white/5" />
+                        {/* Module video */}
+                        <div className="w-full shrink-0 md:w-96">
+                          <div className="overflow-hidden rounded-lg border border-white/5 bg-white/5">
+                            <div className="aspect-video w-full">
+                              <iframe
+                                src={getVimeoEmbedUrl(moduleVimeoIds[mod.number])}
+                                title={`Module ${mod.number} preview`}
+                                className="h-full w-full"
+                                loading="lazy"
+                                allow="autoplay; fullscreen; picture-in-picture"
+                                allowFullScreen
+                              />
                             </div>
-                            <p className="text-xs font-medium text-white/20">Preview coming soon</p>
                           </div>
                         </div>
                       </div>

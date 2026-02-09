@@ -28,14 +28,14 @@ const logos = [
 export function Logos() {
   return (
     <Section id="logos" className="bg-transparent py-0">
-      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-8 sm:gap-x-6 lg:gap-x-12">
+      <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-5 items-center justify-items-center gap-x-4 gap-y-8 sm:gap-x-6 lg:gap-x-12">
         {logos.map((logo, index) => (
-          <div key={index} className="flex justify-center group w-[calc(25%-1rem)] sm:w-[calc(16.66%-1.5rem)] lg:w-[calc(10%-3rem)]">
+          <div key={index} className="flex justify-center group">
             <img
               src={logo.src}
               alt={logo.alt}
               style={{ "--brand-color": logo.color } as React.CSSProperties}
-                className="h-8 md:h-10 lg:h-12 w-auto object-contain hover:scale-110 transition-all duration-500 cursor-pointer"
+              className="h-8 md:h-10 lg:h-12 w-auto object-contain hover:scale-110 transition-all duration-500 cursor-pointer"
             />
           </div>
         ))}

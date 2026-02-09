@@ -10,7 +10,7 @@ export function Story() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="relative overflow-hidden rounded-[2.5rem] border border-black/5 bg-surface-grey/30 px-6 py-16 shadow-sm sm:px-10 md:px-16 lg:px-24"
+        className="relative overflow-hidden px-6 py-16 sm:px-10 md:px-16 lg:px-24"
       >
         {/* Abstract Background */}
         <div className="absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/80 via-white/40 to-transparent blur-3xl" />
@@ -35,7 +35,7 @@ export function Story() {
           >
             <div className="relative aspect-video">
               <iframe
-                src="https://player.vimeo.com/video/1140418453?h=0729acb1d9&autoplay=1&loop=1&muted=1"
+                src="https://player.vimeo.com/video/1140418453?h=0729acb1d9&autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&badge=0"
                 className="absolute inset-0 h-full w-full"
                 allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                 allowFullScreen

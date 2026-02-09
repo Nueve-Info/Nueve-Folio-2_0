@@ -67,6 +67,12 @@ export function Navbar() {
               size="lg" 
               rounded="pill" 
               className="bg-gradient-to-r from-brand-orange to-brand-orange-light text-white font-bold px-8 hover:opacity-90 transition-opacity shadow-sm h-12"
+              onClick={() => {
+                const element = document.getElementById('pricing');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
               Join Now
             </Button>
@@ -88,7 +94,18 @@ export function Navbar() {
               <a href="#" className="text-nueve-black font-medium">Pricing</a>
               <a href="#" className="text-nueve-black font-medium">About</a>
               <hr className="border-black/5" />
-              <Button variant="default" size="default" rounded="pill" className="bg-gradient-to-r from-brand-orange to-brand-orange-light text-white">
+              <Button 
+                variant="default" 
+                size="default" 
+                rounded="pill" 
+                className="bg-gradient-to-r from-brand-orange to-brand-orange-light text-white"
+                onClick={() => {
+                  const element = document.getElementById('pricing');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
                 Join Now
               </Button>
             </div>
