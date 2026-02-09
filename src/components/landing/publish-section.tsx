@@ -49,9 +49,9 @@ export function PublishSection() {
 
         <h2 className="mb-8 text-nueve-black">
           Publish your folio<br />
-          <span className="relative inline-block">
-            <span className="relative z-10">within 24 hours</span>
-            <span className="absolute bottom-2 left-0 -z-10 h-4 w-full -rotate-1 bg-brand-orange/20 md:bottom-4 md:h-8" />
+          <span className="relative inline-block whitespace-nowrap px-2">
+            <span className="absolute inset-0 z-0 translate-y-1 -rotate-2 scale-[1.05] rounded-lg bg-gradient-to-r from-brand-orange to-brand-orange-light" />
+            <span className="relative z-10 text-white">within 24 hours</span>
           </span>
         </h2>
         

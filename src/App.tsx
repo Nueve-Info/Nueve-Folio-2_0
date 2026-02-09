@@ -1,50 +1,15 @@
-import {
-  Navbar,
-  Hero,
-  Logos,
-  Problem,
-  Agenda,
-  ShipCta,
-  Insights,
-  FeaturedTestimonial,
-  Story,
-  AiSection,
-  PublishSection,
-  MentorSection,
-  CourseFit,
-  SocialProof,
-  Pricing,
-  Guarantee,
-  Testimonials,
-  FinalCta,
-  VideoDeepDive,
-} from "@/components/landing"
+import { Routes, Route } from "react-router-dom"
+import HomePage from "@/pages/HomePage"
+import ThankYouPage from "@/pages/ThankYouPage"
+import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage"
 
 function App() {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main>
-        <Hero />
-        <Logos />
-        <Problem />
-        <Agenda />
-        <ShipCta />
-        <Insights />
-        <FeaturedTestimonial />
-        <Story />
-        <AiSection />
-        <PublishSection />
-        <MentorSection />
-        <CourseFit />
-        <SocialProof />
-        <Pricing />
-        <Guarantee />
-        <Testimonials />
-        <FinalCta />
-        <VideoDeepDive />
-      </main>
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/thank-you" element={<ThankYouPage />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+    </Routes>
   )
 }
 

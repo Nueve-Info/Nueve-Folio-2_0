@@ -119,7 +119,7 @@ export function Agenda() {
   }
 
   return (
-    <Section id="agenda" className="bg-nueve-black py-20 lg:py-32">
+    <Section id="agenda" className="bg-nueve-black py-20 lg:py-32" style={{ cursor: "url('/custom-cursor.png') 16 16, auto" }}>
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -216,37 +216,39 @@ export function Agenda() {
                     transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="flex flex-col gap-4 px-5 pt-2 pb-2 md:flex-row md:gap-8 md:px-8 md:pl-[13.5rem]">
-                      {/* Module details */}
-                      <div className="flex-1 space-y-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">
-                        <p className="text-xs font-bold uppercase tracking-widest text-white/30">
-                          What you'll learn
-                        </p>
-                        <ul className="space-y-3">
-                          {mod.details.map((detail, i) => (
-                            <motion.li
-                              key={i}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ duration: 0.3, delay: i * 0.1 }}
-                              className="flex items-start gap-3"
-                            >
-                              <div className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${colors.text} bg-current`} />
-                              <span className="text-base text-white/70">{detail}</span>
-                            </motion.li>
-                          ))}
-                        </ul>
-                      </div>
+                    <div className="pt-2">
+                      <div className="flex flex-col gap-8 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 md:flex-row md:items-center">
+                        {/* Module details */}
+                        <div className="flex-1 space-y-3">
+                          <p className="text-xs font-bold uppercase tracking-widest text-white/30">
+                            What you'll learn
+                          </p>
+                          <ul className="space-y-3">
+                            {mod.details.map((detail, i) => (
+                              <motion.li
+                                key={i}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.3, delay: i * 0.1 }}
+                                className="flex items-start gap-3"
+                              >
+                                <div className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${colors.text} bg-current`} />
+                                <span className="text-base text-white/70">{detail}</span>
+                              </motion.li>
+                            ))}
+                          </ul>
+                        </div>
 
-                      {/* Placeholder visual */}
-                      <div className="flex w-full items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.02] p-8 md:w-72">
-                        <div className="flex flex-col items-center gap-3 text-center">
-                          <Icon className={`h-12 w-12 ${colors.text} opacity-40`} strokeWidth={1} />
-                          <div className="space-y-2">
-                            <div className="mx-auto h-2 w-24 rounded-full bg-white/5" />
-                            <div className="mx-auto h-2 w-16 rounded-full bg-white/5" />
+                        {/* Placeholder visual */}
+                        <div className="flex w-full shrink-0 items-center justify-center rounded-lg border border-white/5 bg-white/5 p-8 md:w-72">
+                          <div className="flex flex-col items-center gap-3 text-center">
+                            <Icon className={`h-12 w-12 ${colors.text} opacity-40`} strokeWidth={1} />
+                            <div className="space-y-2">
+                              <div className="mx-auto h-2 w-24 rounded-full bg-white/5" />
+                              <div className="mx-auto h-2 w-16 rounded-full bg-white/5" />
+                            </div>
+                            <p className="text-xs font-medium text-white/20">Preview coming soon</p>
                           </div>
-                          <p className="text-xs font-medium text-white/20">Preview coming soon</p>
                         </div>
                       </div>
                     </div>

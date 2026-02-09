@@ -26,12 +26,30 @@ export function Story() {
             </p>
           </div>
 
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-12 w-full overflow-hidden rounded-2xl border border-black/5 shadow-2xl md:mt-16"
+          >
+            <div className="relative aspect-video">
+              <iframe
+                src="https://player.vimeo.com/video/1140418453?h=0729acb1d9&autoplay=1&loop=1&muted=1"
+                className="absolute inset-0 h-full w-full"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                allowFullScreen
+                title="vimeo-player"
+              />
+            </div>
+          </motion.div>
+
           {/* NDA Badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
             className="mt-12 inline-flex items-center gap-3 rounded-full border border-black/5 bg-white px-6 py-3 shadow-sm md:mt-16"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500 text-white">

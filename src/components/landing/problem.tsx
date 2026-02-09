@@ -2,7 +2,7 @@ import { useRef, useState } from "react"
 import { motion, useScroll, useMotionValueEvent, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Eye, Layout, Sparkles, ArrowRight, Zap } from "lucide-react"
-import placeholderImg from "@/assets/d85c72c9-bc8a-4dde-9816-7f085e3a7350-1672145030684-pfarm-with-png-watermarked 1.png"
+
 
 const statements = [
   {
@@ -113,26 +113,22 @@ function ScrollStatement({
       className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6"
     >
       <div className="w-full max-w-5xl">
-        <p className="text-center text-4xl font-black tracking-tighter leading-[1.15] text-nueve-black sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl 2xl:text-8xl mb-10 sm:mb-14 lg:mb-16">
+        <p className="text-center text-5xl font-black tracking-tighter leading-[1.15] text-nueve-black sm:text-6xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl mb-14 sm:mb-16 lg:mb-16">
           {renderTextWithIcon()}
         </p>
-        <div className="w-full aspect-video rounded-2xl overflow-hidden">
-          {index === 0 ? (
-            <iframe
-              title="vimeo-player"
-              src="https://player.vimeo.com/video/1152835057?h=86e7a358a2&autoplay=1&muted=1&loop=1"
-              className="w-full h-full"
-              frameBorder="0"
-              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-              allowFullScreen
-            />
-          ) : (
-            <img 
-              src={placeholderImg} 
-              alt="Problem illustration" 
-              className="w-full h-full object-contain"
-            />
-          )}
+        <div className="w-full md:w-[85%] lg:w-[80%] mx-auto aspect-video rounded-2xl overflow-hidden">
+          <iframe
+            title="vimeo-player"
+            src={index === 0
+              ? "https://player.vimeo.com/video/1152835057?h=86e7a358a2&autoplay=1&muted=1&loop=1"
+              : "https://player.vimeo.com/video/1140418453?h=0729acb1d9"
+            }
+            className="w-full h-full"
+            frameBorder="0"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+            allowFullScreen
+          />
         </div>
       </div>
     </motion.div>
@@ -188,7 +184,7 @@ export function Problem() {
           initial={{ scale: 1.1, opacity: 0.4 }}
           animate={{ scale: 1, opacity: 0.8 }}
           transition={transitionConfig}
-          className="absolute left-[60%] top-[35%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          className="absolute right-[-5%] top-1/2 -translate-y-1/2 pointer-events-none"
         >
           <motion.div
             style={{ y: parallaxY }}

@@ -4,10 +4,14 @@ import { Section } from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
 
 const features = [
-  "24/7 Mentor Access",
-  "AI-Powered Workflow",
-  "NDA-Safe Storytelling",
-  "Publish in 24 Hours",
+  "24/7 mentor access — portfolio, career & technical help",
+  "AI-powered workflow — ship without writing code",
+  "Recruiter-proof case study storytelling",
+  "NDA-safe portfolio system",
+  "Live feedback until your folio is interview-ready",
+  "Publish your portfolio within 24 hours",
+  "Job-search pipeline & interview strategy",
+  "Insights distilled from 9,000+ reviewed portfolios",
 ]
 
 export function Pricing() {
@@ -50,19 +54,17 @@ export function Pricing() {
               </div>
 
               {/* Features */}
-              <div className="space-y-4">
+              <ul className="space-y-3">
                 {features.map((feature, index) => (
-                  <div
+                  <li
                     key={index}
-                    className="flex items-center gap-4 rounded-xl bg-surface-grey p-4 transition-colors hover:bg-black/5"
+                    className="flex items-start gap-3"
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-sm shadow-green-500/20">
-                      <Check className="h-4 w-4" />
-                    </div>
-                    <span className="text-lg font-medium text-nueve-black">{feature}</span>
-                  </div>
+                    <Check className="mt-1 h-4 w-4 shrink-0 text-green-500" />
+                    <span className="text-sm font-medium leading-snug text-nueve-black">{feature}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
 
               {/* CTA */}
               <div className="mt-10">
