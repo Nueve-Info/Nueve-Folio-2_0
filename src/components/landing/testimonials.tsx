@@ -15,14 +15,14 @@ const testimonialData = [
     name: "Monique M.",
     role: "UX Designer",
     content: "Folio was a game changer for me. It allowed me to showcase my work in a way that was not possible before.",
-    avatar: "/assets/Monique-CW6YOOXN.png"
+    avatar: "/avatars/monique.png"
   },
   {
     initials: "CK",
     name: "Chris K.",
     role: "Freelance Designer",
     content: "I get so many projects that I can comfortably work as a freelancer.",
-    avatar: "/assets/krystian-BcpSszQY.png"
+    avatar: "/avatars/krystian.png"
   }
 ]
 
