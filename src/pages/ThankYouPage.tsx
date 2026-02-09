@@ -14,7 +14,7 @@
  */
 
 import { motion } from "framer-motion"
-import { CheckCircle, Mail, ArrowLeft } from "lucide-react"
+import { Mail, ArrowLeft } from "lucide-react"
 import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import thankYouImg from "@/assets/thank-you-image.png"
