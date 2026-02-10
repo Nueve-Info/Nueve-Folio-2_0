@@ -162,7 +162,7 @@ export function Agenda() {
       <AnimatePresence>
         {isHovering && (
           <motion.div
-            className="pointer-events-none fixed left-0 top-0 z-[9999] h-12 w-12"
+            className="pointer-events-none fixed left-0 top-0 z-[9999] h-15 w-15"
             style={{
               x: cursorX,
               y: cursorY,

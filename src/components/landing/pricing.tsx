@@ -50,7 +50,7 @@ export function Pricing() {
                 </div>
                 <div className="flex items-center gap-2 text-sm font-medium">
                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                   <span className="text-green-500">Early bird ends Feb 16</span>
+                   <span className="text-green-500">Early bird ends Feb 28</span>
                 </div>
               </div>
 
@@ -92,7 +92,7 @@ export function Pricing() {
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
                 <p className="mt-4 text-center text-xs font-medium uppercase tracking-wider text-text-grey/40">
-                  Program Starts: Feb 16
+                  Program Starts: Feb 28
                 </p>
               </div>
             </div>
