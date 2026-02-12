@@ -53,7 +53,7 @@ export function MentorSection() {
                      <p className="text-sm font-medium text-white">Looking solid! Just move the problem statement higher.</p>
                    </div>
                   <div className="h-10 w-10 rounded-full bg-white block overflow-hidden">
-                    <img src={MentorAvatar} alt="Mentor" className="h-full w-full object-cover" />
+                    <img src={MentorAvatar} alt="Mentor" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                   </div>
                  </div>
                </div>

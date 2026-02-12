@@ -1,22 +1,46 @@
-import { useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { HeroBackground } from "./hero-background"
 import { FloatingBubbles } from "./floating-bubbles"
+
 export function Hero() {
+  const videoRef = useRef<HTMLDivElement>(null)
+  const [loadVideo, setLoadVideo] = useState(false)
+
+  // ── Defer Vimeo iframe: only load when video area is near viewport ──
   useEffect(() => {
-    // Load Vimeo player script
+    const el = videoRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setLoadVideo(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: "200px" }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  // Load Vimeo player API script only when iframe is loaded
+  useEffect(() => {
+    if (!loadVideo) return
+
     const script = document.createElement("script")
     script.src = "https://player.vimeo.com/api/player.js"
     script.async = true
     document.body.appendChild(script)
 
     return () => {
-      // Cleanup script on unmount
       if (document.body.contains(script)) {
         document.body.removeChild(script)
       }
     }
-  }, [])
+  }, [loadVideo])
 
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background bg-[radial-gradient(at_40%_0%,rgba(255,179,71,0.12)_0px,transparent_50%),radial-gradient(at_60%_0%,rgba(248,129,13,0.12)_0px,transparent_50%)] pt-28 pb-20 lg:pt-36 lg:pb-24">
@@ -110,15 +134,26 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-16"
         >
-          <div className="mx-auto aspect-video w-full overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gray-900/10">
-            <iframe
-              src="https://player.vimeo.com/video/1163267877?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
-              className="h-full w-full"
-              frameBorder="0"
-              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              title="Hero_trimed"
-            ></iframe>
+          <div
+            ref={videoRef}
+            className="mx-auto aspect-video w-full overflow-hidden rounded-2xl shadow-2xl ring-1 ring-gray-900/10 bg-nueve-black"
+          >
+            {loadVideo ? (
+              <iframe
+                src="https://player.vimeo.com/video/1163267877?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
+                className="h-full w-full"
+                frameBorder="0"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                title="Hero_trimed"
+                loading="lazy"
+              ></iframe>
+            ) : (
+              /* Lightweight placeholder while iframe loads */
+              <div className="flex h-full w-full items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-orange border-t-transparent" />
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

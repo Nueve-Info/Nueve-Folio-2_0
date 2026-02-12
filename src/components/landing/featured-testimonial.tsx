@@ -24,6 +24,8 @@ export function FeaturedTestimonial() {
               <img 
                 src={testimonialImage} 
                 alt="Slawek Kozik" 
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover transition-all duration-500"
               />
             </div>

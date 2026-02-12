@@ -42,6 +42,8 @@ export function SocialProof() {
             <img 
               src={testimonialImage} 
               alt="Slawek Kozik" 
+              loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover"
             />
           </div>
