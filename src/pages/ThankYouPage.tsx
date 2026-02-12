@@ -42,6 +42,8 @@ export default function ThankYouPage() {
             <img 
               src={thankYouImg} 
               alt="Thank you" 
+              loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover"
             />
           </div>

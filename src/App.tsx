@@ -1,13 +1,15 @@
-import { useEffect } from "react"
+import { useEffect, lazy, Suspense } from "react"
 import { Routes, Route, useLocation } from "react-router-dom"
-import HomePage from "@/pages/HomePage"
-import ThankYouPage from "@/pages/ThankYouPage"
-import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage"
 import {
   trackMeta,
   capturePosthog,
   getButtonLabel,
 } from "@/lib/analytics"
+
+// ── Lazy-loaded route pages (code-split into separate chunks) ──
+const HomePage = lazy(() => import("@/pages/HomePage"))
+const ThankYouPage = lazy(() => import("@/pages/ThankYouPage"))
+const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage"))
 
 /** Fire Meta Pixel PageView + PostHog $pageview on every SPA route change. */
 function usePageViewTracking() {
@@ -53,11 +55,19 @@ function App() {
   useGlobalButtonTracking()
 
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/thank-you" element={<ThankYouPage />} />
-      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-    </Routes>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-background">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-orange border-t-transparent" />
+        </div>
+      }
+    >
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/thank-you" element={<ThankYouPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+      </Routes>
+    </Suspense>
   )
 }
 

@@ -1,10 +1,5 @@
-export { Button, buttonVariants } from "./button"
-export { Section } from "./section"
-export { BentoGrid, BentoCard, BentoCardHeader } from "./bento-grid"
-export {
-  PlaceholderBlock,
-  PlaceholderLine,
-  LogoMarkPlaceholder,
-  MediaPlaceholder,
-  TestimonialPlaceholder,
-} from "./placeholders"
+export * from "./accordion"
+export * from "./bento-grid"
+export * from "./button"
+export * from "./placeholders"
+export * from "./section"

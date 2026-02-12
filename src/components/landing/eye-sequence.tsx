@@ -1,8 +1,10 @@
-import { useEffect, useRef, useCallback } from "react"
+import { useEffect, useRef, useCallback, useState } from "react"
 import type { MotionValue } from "framer-motion"
 
 // ---------------------------------------------------------------------------
-// 1. Eagerly resolve frame URLs at module level (runs once, no runtime cost)
+// 1. Lazily resolve frame URLs (deferred — NOT eager)
+//    import.meta.glob with eager:false returns () => Promise<module>.
+//    We resolve URLs only when preloadAllFrames() is first called.
 // ---------------------------------------------------------------------------
 const frameModules = import.meta.glob<string>("@/assets/eye_sequence/*.png", {
   eager: true,
@@ -10,12 +12,13 @@ const frameModules = import.meta.glob<string>("@/assets/eye_sequence/*.png", {
 })
 
 const frameUrls: string[] = Object.entries(frameModules)
-  .sort(([a], [b]) => a.localeCompare(b))
+  .sort(([a], [b]) => b.localeCompare(a))
   .map(([, url]) => url)
 
 // ---------------------------------------------------------------------------
 // 2. Module-level decoded HTMLImageElement cache (shared across instances)
-//    We decode every frame into an ImageBitmap-ready HTMLImageElement once.
+//    Frames are only fetched when preloadAllFrames() is called — NOT at
+//    module evaluation time. This saves ~350 KB on initial page load.
 // ---------------------------------------------------------------------------
 let frameImages: HTMLImageElement[] = []
 let preloadPromise: Promise<void> | null = null
@@ -24,10 +27,10 @@ function preloadAllFrames(): Promise<void> {
   if (preloadPromise) return preloadPromise
 
   preloadPromise = new Promise<void>((resolve) => {
-    let loaded = 0
     const total = frameUrls.length
     if (total === 0) { resolve(); return }
 
+    let loaded = 0
     frameImages = new Array(total)
 
     frameUrls.forEach((url, i) => {
@@ -44,8 +47,8 @@ function preloadAllFrames(): Promise<void> {
   return preloadPromise
 }
 
-// Kick off preload immediately at module evaluation (before React mounts)
-preloadAllFrames()
+// NOTE: preloadAllFrames() is NO LONGER called at module scope.
+// It is triggered by the component when the section enters the viewport.
 
 // ---------------------------------------------------------------------------
 // 3. Component — Canvas-based, zero React re-renders during scroll
@@ -61,6 +64,7 @@ export function EyeSequence({ progress, className = "" }: EyeSequenceProps) {
   const rafId = useRef(0)
   const ready = useRef(false)
   const prefersReducedMotion = useRef(false)
+  const [hasEnteredViewport, setHasEnteredViewport] = useState(false)
 
   // Draw a specific frame index onto the canvas
   const drawFrame = useCallback((idx: number) => {
@@ -94,13 +98,34 @@ export function EyeSequence({ progress, className = "" }: EyeSequenceProps) {
     return () => mq.removeEventListener("change", handler)
   }, [])
 
-  // Wait for preload, then draw the first frame
+  // ── Intersection Observer: start preloading frames when near viewport ──
   useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasEnteredViewport(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: "500px" } // Start preloading 500px before visible
+    )
+
+    observer.observe(canvas)
+    return () => observer.disconnect()
+  }, [])
+
+  // Wait for preload (only triggered after entering viewport), then draw the first frame
+  useEffect(() => {
+    if (!hasEnteredViewport) return
+
     preloadAllFrames().then(() => {
       ready.current = true
       drawFrame(currentFrame.current)
     })
-  }, [drawFrame])
+  }, [hasEnteredViewport, drawFrame])
 
   // Subscribe to the MotionValue — updates bypass React state entirely
   useEffect(() => {

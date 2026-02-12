@@ -114,7 +114,7 @@ function ScrollStatement({
       animate={state}
       variants={variants}
       transition={transitionConfig}
-      className={`absolute inset-0 flex flex-col items-center px-4 sm:px-6 ${index === 0 ? "justify-start pt-[4vh] sm:pt-[25vh]" : "justify-center"}`}
+      className={`absolute inset-0 flex flex-col items-center px-4 sm:px-6 ${index === 0 ? "justify-start pt-[1vh] sm:pt-[25vh]" : "justify-center"}`}
     >
       <div className="w-full max-w-5xl">
         <p className="relative sm:z-10 text-center text-5xl font-black tracking-tighter leading-[1.15] text-nueve-black sm:text-6xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl mb-6 sm:mb-8 lg:mb-8">
