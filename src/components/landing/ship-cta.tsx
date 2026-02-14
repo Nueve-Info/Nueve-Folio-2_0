@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { Section } from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
+import { scrollToSection } from "@/lib/utils"
 
 export function ShipCta() {
   return (
@@ -29,12 +30,7 @@ export function ShipCta() {
             size="lg" 
             rounded="pill" 
             className="bg-brand-orange text-nueve-black hover:bg-brand-orange/90 font-bold px-8 py-6 text-lg"
-            onClick={() => {
-              const element = document.getElementById('pricing');
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
+            onClick={() => scrollToSection('pricing')}
           >
             Join Nueve Folio 2.0
           </Button>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { cn, scrollToSection } from "@/lib/utils"
 
 export function Navbar() {
   const [isOpen] = useState(false)
@@ -67,12 +67,7 @@ export function Navbar() {
               size="lg" 
               rounded="pill" 
               className="bg-gradient-to-r from-brand-orange to-brand-orange-light text-white font-bold px-8 hover:opacity-90 transition-opacity shadow-sm h-12"
-              onClick={() => {
-                const element = document.getElementById('pricing');
-                if (element) {
-                  element.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
+              onClick={() => scrollToSection('pricing')}
             >
               Join Now
             </Button>
@@ -99,12 +94,7 @@ export function Navbar() {
                 size="default" 
                 rounded="pill" 
                 className="bg-gradient-to-r from-brand-orange to-brand-orange-light text-white"
-                onClick={() => {
-                  const element = document.getElementById('pricing');
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
+                onClick={() => scrollToSection('pricing')}
               >
                 Join Now
               </Button>
