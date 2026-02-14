@@ -4,6 +4,7 @@ import type { MotionValue } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Eye, Layout, Sparkles, ArrowRight, Zap } from "lucide-react"
 import { EyeSequence } from "./eye-sequence"
+import { scrollToSection } from "@/lib/utils"
 
 
 const statements = [
@@ -114,7 +115,7 @@ function ScrollStatement({
       animate={state}
       variants={variants}
       transition={transitionConfig}
-      className={`absolute inset-0 flex flex-col items-center px-4 sm:px-6 ${index === 0 ? "justify-start pt-[1vh] sm:pt-[25vh]" : "justify-center"}`}
+      className={`absolute inset-0 flex flex-col items-center px-4 sm:px-6 ${index === 0 ? "justify-start pt-[3vh] sm:pt-[12vh]" : "justify-center"}`}
     >
       <div className="w-full max-w-5xl">
         <p className="relative sm:z-10 text-center text-5xl font-black tracking-tighter leading-[1.15] text-nueve-black sm:text-6xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl mb-6 sm:mb-8 lg:mb-8">
@@ -197,7 +198,7 @@ export function Problem() {
         </motion.div>
 
         {/* Statements container */}
-        <div className="relative z-[2] h-[60vh] md:h-[80vh] w-full max-w-6xl">
+        <div className="relative z-[2] h-[70vh] md:h-[80vh] w-full max-w-6xl">
           {statements.map((statement, index) => (
             <ScrollStatement
               key={index}
@@ -222,12 +223,7 @@ export function Problem() {
             size="lg"
             rounded="pill"
             className="bg-gradient-to-r from-brand-orange to-brand-orange-light text-white font-bold hover:opacity-90 transition-opacity"
-            onClick={() => {
-              const element = document.getElementById('pricing');
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
+            onClick={() => scrollToSection('pricing')}
           >
             Join Nueve Folio 2.0
           </Button>
