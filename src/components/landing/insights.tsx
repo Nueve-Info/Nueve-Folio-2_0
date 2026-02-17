@@ -1,7 +1,10 @@
 import { motion } from "framer-motion"
 import { Section } from "@/components/ui/section"
+import { useInViewOnce } from "@/hooks/useInViewOnce"
 
 export function Insights() {
+  const [videoRef, videoInView] = useInViewOnce()
+
   return (
     <Section id="insights" className="bg-white py-12 md:py-16 lg:py-24">
       <motion.div
@@ -26,18 +29,21 @@ export function Insights() {
         </p>
         
         {/* Vimeo video */}
-        <div className="relative overflow-hidden rounded-lg border border-black/5 mx-auto aspect-[4/3] max-w-4xl bg-white shadow-sm md:aspect-[2/1]">
-          <iframe
-            title="vimeo-player"
-            src="https://player.vimeo.com/video/1152835057?h=86e7a358a2&autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0&badge=0"
-            width="640"
-            height="360"
-            frameBorder="0"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-            allowFullScreen
-            className="absolute inset-0 h-full w-full"
-          />
+        <div
+          ref={videoRef}
+          className="relative overflow-hidden rounded-lg border border-black/5 mx-auto aspect-[4/3] max-w-4xl bg-nueve-black shadow-sm md:aspect-[2/1]"
+        >
+          {videoInView && (
+            <iframe
+              title="vimeo-player"
+              src="https://player.vimeo.com/video/1152835057?h=86e7a358a2&autoplay=1&muted=1&loop=1&background=1&autopause=0&title=0&byline=0&portrait=0&badge=0"
+              frameBorder="0"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              allowFullScreen
+              className="absolute inset-0 h-full w-full border-0"
+            />
+          )}
         </div>
       </motion.div>
     </Section>

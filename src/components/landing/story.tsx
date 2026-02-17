@@ -1,8 +1,11 @@
 import { motion } from "framer-motion"
 import { ShieldCheck } from "lucide-react"
 import { Section } from "@/components/ui/section"
+import { useInViewOnce } from "@/hooks/useInViewOnce"
 
 export function Story() {
+  const [videoRef, videoInView] = useInViewOnce()
+
   return (
     <Section id="story" className="bg-white py-20 lg:py-32">
       <motion.div
@@ -33,14 +36,16 @@ export function Story() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mt-12 w-full overflow-hidden rounded-2xl border border-black/5 shadow-2xl md:mt-16"
           >
-            <div className="relative aspect-video">
-              <iframe
-                src="https://player.vimeo.com/video/1140418453?h=0729acb1d9&autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&badge=0"
-                className="absolute inset-0 h-full w-full"
-                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                allowFullScreen
-                title="vimeo-player"
-              />
+            <div ref={videoRef} className="relative aspect-video bg-nueve-black">
+              {videoInView && (
+                <iframe
+                  src="https://player.vimeo.com/video/1140418453?h=0729acb1d9&autoplay=1&loop=1&muted=1&background=1&autopause=0&title=0&byline=0&portrait=0&badge=0"
+                  className="absolute inset-0 h-full w-full border-0"
+                  allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                  allowFullScreen
+                  title="vimeo-player"
+                />
+              )}
             </div>
           </motion.div>
 

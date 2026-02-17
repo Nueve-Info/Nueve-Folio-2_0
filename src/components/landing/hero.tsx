@@ -140,7 +140,7 @@ export function Hero() {
           >
             {loadVideo ? (
               <iframe
-                src="https://player.vimeo.com/video/1163267877?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
+                src="https://player.vimeo.com/video/1163267877?autoplay=1&amp;muted=1&amp;loop=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
                 className="h-full w-full"
                 frameBorder="0"
                 allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"

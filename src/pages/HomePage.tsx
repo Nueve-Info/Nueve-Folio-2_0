@@ -1,15 +1,18 @@
 import {
+  AnnouncementBar,
   Navbar,
   Hero,
   Logos,
   Problem,
   Agenda,
+  MarketChanged,
   ShipCta,
   Insights,
   FeaturedTestimonial,
   Story,
   AiSection,
   PublishSection,
+  MeetMentor,
   MentorSection,
   CourseFit,
   SocialProof,
@@ -24,11 +27,13 @@ import {
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
+      <AnnouncementBar />
       <Navbar />
       <main>
         <Hero />
         <Logos />
-        <Problem />
+        {/* <Problem /> */}
+        <MarketChanged />
         <Agenda />
         <ShipCta />
         <Insights />
@@ -36,6 +41,7 @@ export default function HomePage() {
         <Story />
         <AiSection />
         <PublishSection />
+        <MeetMentor />
         <MentorSection />
         <CourseFit />
         <SocialProof />

@@ -27,7 +27,7 @@ const logos = [
 
 export function Logos() {
   return (
-    <Section id="logos" className="bg-transparent py-0">
+    <Section id="logos" className="bg-transparent pt-0 pb-12 md:pb-20 lg:pb-24">
       <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-5 items-center justify-items-center gap-x-4 gap-y-8 sm:gap-x-6 lg:gap-x-12">
         {logos.map((logo, index) => (
           <div key={index} className="flex justify-center group">

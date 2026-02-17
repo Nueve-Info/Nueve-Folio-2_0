@@ -42,9 +42,9 @@ export function VideoDeepDive() {
             size="lg"
             rounded="pill"
             className="group bg-brand-orange text-white hover:bg-brand-orange/90 px-8 py-6 text-lg shadow-xl shadow-brand-orange/20 transition-all hover:scale-105 active:scale-95"
-            onClick={() => scrollToSection('pricing')}
+            onClick={() => window.open("https://calendar.notion.so/meet/stanswiatkiewicz/goc7j4oif", "_blank")}
           >
-            Join Nueve Folio 2.0
+            Book a call
             <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Button>
         </motion.div>
