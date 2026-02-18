@@ -19,6 +19,9 @@ type Fbq = (...args: any[]) => void;
 interface PostHogStub {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   capture: (event: string, properties?: Record<string, any>) => void;
+  getFeatureFlag: (flagKey: string) => string | boolean | undefined;
+  onFeatureFlags: (cb: () => void) => void;
+  reloadFeatureFlags: () => void;
 }
 
 declare global {

@@ -27,7 +27,7 @@ export function Navbar() {
   return (
     <nav className={cn(
       "fixed left-0 right-0 z-50 flex justify-center pointer-events-none transition-all duration-300",
-      isExpired ? "top-0" : "top-[50px] md:top-[60px]"
+      isExpired ? "top-0" : "top-[68px] md:top-[90px]"
     )}>
       <motion.div 
         style={isMobile ? { height, paddingTop } : {}}

@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button"
 import { trackMeta, capturePosthog } from "@/lib/analytics"
 import { useCountdown } from "@/hooks/useCountdown"
 import { scrollToSection } from "@/lib/utils"
+import { useBubbleAiAbConfig } from "@/lib/experiments"
 
 /* ── Card feature bullets (concise, high-signal) ── */
 const cardFeatures = [
@@ -57,6 +58,7 @@ const valueBuckets = [
 
 export function Pricing() {
   const { days, hours, minutes, seconds, isExpired } = useCountdown()
+  const { pricing, activeExperiment, variant } = useBubbleAiAbConfig()
 
   return (
     <Section
@@ -283,7 +285,7 @@ export function Pricing() {
                 <div className="mb-8 text-center">
                   <div className="flex items-baseline justify-center gap-1.5">
                     <span className="text-6xl font-black text-nueve-black md:text-7xl">
-                      $17
+                      ${pricing.displayPrice}
                     </span>
                     <span className="text-lg font-medium text-text-grey/50">
                       / one-time
@@ -325,17 +327,17 @@ export function Pricing() {
                     onClick={() => {
                       trackMeta("InitiateCheckout", {
                         content_name: "Nueve Folio 2.0",
-                        value: 17,
+                        value: pricing.displayPrice,
                         currency: "USD",
                       })
                       capturePosthog("InitiateCheckout", {
                         label: "Join Now",
                         path: window.location.pathname,
+                        ab_experiment: activeExperiment,
+                        ab_variant: variant,
+                        price: pricing.displayPrice,
                       })
-                      window.open(
-                        "https://buy.stripe.com/5kQ00idvZ3SX5wlgBMgA81G",
-                        "_blank",
-                      )
+                      window.open(pricing.checkoutUrl, "_blank")
                     }}
                   >
                     <span className="mr-2">Join Now</span>
