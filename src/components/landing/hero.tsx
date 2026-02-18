@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { HeroBackground } from "./hero-background"
 import { FloatingBubbles } from "./floating-bubbles"
+import { useBubbleAiAbConfig } from "@/lib/experiments"
 
 export function Hero() {
   const videoRef = useRef<HTMLDivElement>(null)
   const [loadVideo, setLoadVideo] = useState(false)
+  const { heroH1Variant } = useBubbleAiAbConfig()
 
   // ── Defer Vimeo iframe: only load when video area is near viewport ──
   useEffect(() => {
@@ -43,7 +45,7 @@ export function Hero() {
   }, [loadVideo])
 
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background bg-[radial-gradient(at_40%_0%,rgba(255,179,71,0.12)_0px,transparent_50%),radial-gradient(at_60%_0%,rgba(248,129,13,0.12)_0px,transparent_50%)] pt-28 pb-20 lg:pt-36 lg:pb-24">
+    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background bg-[radial-gradient(at_40%_0%,rgba(255,179,71,0.12)_0px,transparent_50%),radial-gradient(at_60%_0%,rgba(248,129,13,0.12)_0px,transparent_50%)] pt-40 pb-20 lg:pt-48 lg:pb-24">
       {/* Unicorn Studio Embed */}
       <HeroBackground className="bg-transparent" />
       
@@ -67,19 +69,31 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Heading */}
+          {/* Heading — A/B tested via PostHog */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="text-nueve-black"
           >
-            Build a UX/UI portfolio that{" "}
-            <span className="relative inline-block whitespace-nowrap px-2">
-              <span className="absolute inset-0 -z-10 translate-y-1 -rotate-2 scale-[1.05] rounded-lg bg-gradient-to-r from-brand-orange to-brand-orange-light" />
-              <span className="relative z-10 text-white">gets you hired</span>
-            </span>{" "}
-            in&nbsp;2026
+            {heroH1Variant === "B" ? (
+              <>
+                Land your dream UX/UI role with a{" "}
+                <span className="relative inline-block whitespace-nowrap px-2">
+                  <span className="absolute inset-0 -z-10 translate-y-1 -rotate-2 scale-[1.05] rounded-lg bg-gradient-to-r from-brand-orange to-brand-orange-light" />
+                  <span className="relative z-10 text-white">portfolio that converts</span>
+                </span>
+              </>
+            ) : (
+              <>
+                Build a UX/UI portfolio that{" "}
+                <span className="relative inline-block whitespace-nowrap px-2">
+                  <span className="absolute inset-0 -z-10 translate-y-1 -rotate-2 scale-[1.05] rounded-lg bg-gradient-to-r from-brand-orange to-brand-orange-light" />
+                  <span className="relative z-10 text-white">gets you hired</span>
+                </span>{" "}
+                in&nbsp;2026
+              </>
+            )}
           </motion.h1>
 
           {/* Description */}
@@ -140,7 +154,7 @@ export function Hero() {
           >
             {loadVideo ? (
               <iframe
-                src="https://player.vimeo.com/video/1163267877?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
+                src="https://player.vimeo.com/video/1163267877?autoplay=1&amp;muted=1&amp;loop=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
                 className="h-full w-full"
                 frameBorder="0"
                 allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"

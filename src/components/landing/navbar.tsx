@@ -2,11 +2,13 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { cn, scrollToSection } from "@/lib/utils"
+import { useCountdown } from "@/hooks/useCountdown"
 
 export function Navbar() {
   const [isOpen] = useState(false)
   const { scrollY } = useScroll()
   const [isMobile, setIsMobile] = useState(false)
+  const { isExpired } = useCountdown()
 
   useEffect(() => {
     const checkMobile = () => {
@@ -23,7 +25,10 @@ export function Navbar() {
   const logoScale = useTransform(scrollY, [0, 50], [1, 0.9])
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+    <nav className={cn(
+      "fixed left-0 right-0 z-50 flex justify-center pointer-events-none transition-all duration-300",
+      isExpired ? "top-0" : "top-[68px] md:top-[90px]"
+    )}>
       <motion.div 
         style={isMobile ? { height, paddingTop } : {}}
         className={cn(

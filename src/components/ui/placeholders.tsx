@@ -1,31 +1,17 @@
-import { useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { Play, User } from "lucide-react"
+import { useInViewOnce } from "@/hooks/useInViewOnce"
 
 interface PlaceholderProps extends React.HTMLAttributes<HTMLDivElement> {
   videoUrl?: string
 }
 
 export function PlaceholderBlock({ className, videoUrl, ...props }: PlaceholderProps) {
-  useEffect(() => {
-    if (videoUrl) {
-      // Load Vimeo player script
-      const script = document.createElement("script")
-      script.src = "https://player.vimeo.com/api/player.js"
-      script.async = true
-      document.body.appendChild(script)
-
-      return () => {
-        // Cleanup script on unmount
-        if (document.body.contains(script)) {
-          document.body.removeChild(script)
-        }
-      }
-    }
-  }, [videoUrl])
+  const [ref, inView] = useInViewOnce()
 
   return (
     <div
+      ref={ref}
       className={cn(
         "relative overflow-hidden rounded-lg border border-black/5 bg-surface-grey",
         "before:absolute before:inset-0 before:bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.4),transparent)] before:opacity-50",
@@ -33,11 +19,11 @@ export function PlaceholderBlock({ className, videoUrl, ...props }: PlaceholderP
       )}
       {...props}
     >
-      {videoUrl ? (
+      {videoUrl && inView ? (
         <div className="absolute inset-0">
           <div style={{ padding: "56.25% 0 0 0", position: "relative" }}>
             <iframe
-              src={`${videoUrl}?autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479`}
+              src={`${videoUrl}?autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&badge=0&autopause=0&background=1&player_id=0&app_id=58479`}
               frameBorder="0"
               allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
@@ -51,6 +37,10 @@ export function PlaceholderBlock({ className, videoUrl, ...props }: PlaceholderP
               title="Introduction"
             />
           </div>
+        </div>
+      ) : videoUrl ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-nueve-black">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-orange border-t-transparent" />
         </div>
       ) : (
         <div className="absolute inset-0 opacity-[0.03]" 
