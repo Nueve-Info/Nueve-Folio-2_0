@@ -3,7 +3,6 @@ import {
   Navbar,
   Hero,
   Logos,
-  Problem,
   Agenda,
   MarketChanged,
   ShipCta,

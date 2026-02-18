@@ -3,7 +3,6 @@ import { Section } from "@/components/ui/section"
 import { PlaceholderBlock } from "@/components/ui"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
-import { scrollToSection } from "@/lib/utils"
 
 export function VideoDeepDive() {
   return (
