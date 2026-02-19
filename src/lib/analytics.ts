@@ -11,7 +11,8 @@ type MetaStandardEvent =
   | "PageView"
   | "AddToCart"
   | "InitiateCheckout"
-  | "Lead";
+  | "Lead"
+  | "Purchase";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Fbq = (...args: any[]) => void;

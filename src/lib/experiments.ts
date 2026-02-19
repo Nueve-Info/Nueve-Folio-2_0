@@ -7,16 +7,26 @@ const FLAG_DIVIDER = "NUF2-0__Bubble-AI__Experiment-Divider-1"
 const FLAG_PRICE = "NUF2-0__Bubble-AI__Price-1"
 const FLAG_HEADING = "NUF2-0__Bubble-AI__Heading-1"
 
-/* ── Stripe checkout URLs ── */
+/* ── Stripe Price IDs ──
+ *
+ *  Find these in Stripe Dashboard → Products → [your product] → Pricing
+ *  Each ID starts with "price_"
+ *
+ *  Map each A/B variant to the correct Price ID:
+ *    price.control   → $17 price (control group)
+ *    price.test      → $27 price (price test group)
+ *    heading.control → price for heading Var-A group
+ *    heading.test    → price for heading Var-B group
+ */
 
 const STRIPE = {
   price: {
-    control: "https://buy.stripe.com/eVq14meA3gFJ8IxclwgA81E", // $17
-    test: "https://buy.stripe.com/4gM4gy2Rl3SX3odclwgA81J",    // $27
+    control: "price_1T2WGuBskYNJtWpXEbqq50rM",   // $17
+    test:    "price_1T2WGuBskYNJtWpXEbqq50rM",   // $27 — update if you create a separate $27 price
   },
   heading: {
-    control: "https://buy.stripe.com/fZu4gygIbblpbUJbhsgA81K", // Var-A
-    test: "https://buy.stripe.com/bJe00ifE72OTaQF1GSgA81L",    // Var-B
+    control: "price_1T2WGuBskYNJtWpXEbqq50rM", // Var-A
+    test:    "price_1T2WGuBskYNJtWpXEbqq50rM", // Var-B
   },
 } as const
 
@@ -71,7 +81,7 @@ export interface BubbleAiAbConfig {
   heroH1Variant: "A" | "B"
   pricing: {
     displayPrice: 17 | 27
-    checkoutUrl: string
+    priceId: string
   }
 }
 
@@ -93,7 +103,7 @@ export function useBubbleAiAbConfig(): BubbleAiAbConfig {
         heroH1Variant: isTest ? "B" : "A",
         pricing: {
           displayPrice: 17,
-          checkoutUrl: isTest ? STRIPE.heading.test : STRIPE.heading.control,
+          priceId: isTest ? STRIPE.heading.test : STRIPE.heading.control,
         },
       }
     }
@@ -107,7 +117,7 @@ export function useBubbleAiAbConfig(): BubbleAiAbConfig {
         heroH1Variant: "A",
         pricing: {
           displayPrice: isTest ? 27 : 17,
-          checkoutUrl: isTest ? STRIPE.price.test : STRIPE.price.control,
+          priceId: isTest ? STRIPE.price.test : STRIPE.price.control,
         },
       }
     }
@@ -119,7 +129,7 @@ export function useBubbleAiAbConfig(): BubbleAiAbConfig {
       heroH1Variant: "A",
       pricing: {
         displayPrice: 17,
-        checkoutUrl: STRIPE.price.control,
+        priceId: STRIPE.price.control,
       },
     }
   }, [divider, priceVariant, headingVariant])

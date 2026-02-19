@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { motion } from "framer-motion"
 import {
   Check,
@@ -17,6 +18,7 @@ import { trackMeta, capturePosthog } from "@/lib/analytics"
 import { useCountdown } from "@/hooks/useCountdown"
 import { scrollToSection } from "@/lib/utils"
 import { useBubbleAiAbConfig } from "@/lib/experiments"
+import { CheckoutModal } from "@/components/landing/embedded-checkout"
 
 /* ── Card feature bullets (concise, high-signal) ── */
 const cardFeatures = [
@@ -57,8 +59,9 @@ const valueBuckets = [
 ]
 
 export function Pricing() {
-  const { days, hours, minutes, seconds, isExpired } = useCountdown()
+  const { days, hours, minutes, seconds, isExpired, isPaused } = useCountdown()
   const { pricing, activeExperiment, variant } = useBubbleAiAbConfig()
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
 
   return (
     <Section
@@ -212,7 +215,7 @@ export function Pricing() {
 
             <div className="relative overflow-hidden rounded-[2rem] bg-white shadow-2xl">
               {/* Countdown strip */}
-              {!isExpired && (
+              {!isExpired && !isPaused && (
                 <div className="relative flex flex-col items-center justify-center bg-brand-orange px-4 py-8 overflow-hidden">
                   {/* Animated background pattern */}
                   <div className="absolute inset-0 opacity-10">
@@ -337,7 +340,7 @@ export function Pricing() {
                         ab_variant: variant,
                         price: pricing.displayPrice,
                       })
-                      window.open(pricing.checkoutUrl, "_blank")
+                      setIsCheckoutOpen(true)
                     }}
                   >
                     <span className="mr-2">Join Now</span>
@@ -361,6 +364,14 @@ export function Pricing() {
           </motion.div>
         </div>
       </div>
+
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        priceId={pricing.priceId}
+        abExperiment={activeExperiment}
+        abVariant={variant}
+        onClose={() => setIsCheckoutOpen(false)}
+      />
     </Section>
   )
 }
