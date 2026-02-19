@@ -13,13 +13,33 @@
  *     successUrl: "https://yourdomain.com/thank-you"
  */
 
+import { useEffect } from "react"
 import { motion } from "framer-motion"
 import { Mail, ArrowLeft } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
+import { trackMeta, capturePosthog } from "@/lib/analytics"
 import thankYouImg from "@/assets/thank-you-image.png"
 
 export default function ThankYouPage() {
+  const [searchParams] = useSearchParams()
+
+  // Fire Purchase analytics once when arriving from embedded checkout (session_id present)
+  useEffect(() => {
+    const sessionId = searchParams.get("session_id")
+    if (!sessionId) return
+
+    trackMeta("Purchase", {
+      content_name: "Nueve Folio 2.0",
+      currency: "USD",
+    })
+    capturePosthog("Purchase", {
+      session_id: sessionId,
+      path: window.location.pathname,
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-6 text-center">
       {/* Radial glow behind the icon */}

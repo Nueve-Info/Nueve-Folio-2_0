@@ -17,16 +17,17 @@ function TimeBox({ value, label }: { value: number; label: string }) {
 }
 
 export function AnnouncementBar() {
-  const { days, hours, minutes, seconds, isExpired } = useCountdown()
+  const { days, hours, minutes, seconds, isExpired, isPaused } = useCountdown()
 
   if (isExpired) return null
+  if (isPaused) return null
 
   return (
     <motion.div
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-[60] cursor-pointer overflow-hidden bg-brand-orange"
+      className="fixed top-0 left-0 right-0 z-50 cursor-pointer overflow-hidden bg-brand-orange"
       onClick={() => scrollToSection("pricing")}
     >
       {/* Animated background pattern (matches pricing card) */}
