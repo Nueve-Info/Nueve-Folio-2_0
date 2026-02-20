@@ -85,6 +85,18 @@ export default defineConfig(({ mode }) => {
     'import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY': JSON.stringify(
       viteEnv.VITE_STRIPE_PUBLISHABLE_KEY ?? process.env.VITE_STRIPE_PUBLISHABLE_KEY ?? ''
     ),
+    'import.meta.env.VITE_STRIPE_PRICE_CONTROL': JSON.stringify(
+      viteEnv.VITE_STRIPE_PRICE_CONTROL ?? process.env.VITE_STRIPE_PRICE_CONTROL ?? ''
+    ),
+    'import.meta.env.VITE_STRIPE_PRICE_TEST': JSON.stringify(
+      viteEnv.VITE_STRIPE_PRICE_TEST ?? process.env.VITE_STRIPE_PRICE_TEST ?? ''
+    ),
+    'import.meta.env.VITE_STRIPE_HEADING_CONTROL': JSON.stringify(
+      viteEnv.VITE_STRIPE_HEADING_CONTROL ?? process.env.VITE_STRIPE_HEADING_CONTROL ?? ''
+    ),
+    'import.meta.env.VITE_STRIPE_HEADING_TEST': JSON.stringify(
+      viteEnv.VITE_STRIPE_HEADING_TEST ?? process.env.VITE_STRIPE_HEADING_TEST ?? ''
+    ),
   },
 
   resolve: {

@@ -21,14 +21,14 @@ const FLAG_HEADING = "NUF2-0__Bubble-AI__Heading-1"
 
 const STRIPE = {
   price: {
-    control: "price_1T2WGuBskYNJtWpXEbqq50rM",   // $17
-    test:    "price_1T2WGuBskYNJtWpXEbqq50rM",   // $27 — update if you create a separate $27 price
+    control: import.meta.env.VITE_STRIPE_PRICE_CONTROL || "price_1T2WGuBskYNJtWpXEbqq50rM",
+    test:    import.meta.env.VITE_STRIPE_PRICE_TEST    || "price_1T2WGuBskYNJtWpXEbqq50rM",
   },
   heading: {
-    control: "price_1T2WGuBskYNJtWpXEbqq50rM", // Var-A
-    test:    "price_1T2WGuBskYNJtWpXEbqq50rM", // Var-B
+    control: import.meta.env.VITE_STRIPE_HEADING_CONTROL || "price_1T2WGuBskYNJtWpXEbqq50rM",
+    test:    import.meta.env.VITE_STRIPE_HEADING_TEST    || "price_1T2WGuBskYNJtWpXEbqq50rM",
   },
-} as const
+}
 
 /* ── Low-level hook: subscribe to PostHog flags ── */
 
