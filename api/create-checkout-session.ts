@@ -79,6 +79,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       metadata: {
         ab_experiment: typeof body.ab_experiment === "string" ? body.ab_experiment : "none",
         ab_variant: typeof body.ab_variant === "string" ? body.ab_variant : "control",
+        funnel_id: typeof body.funnel_id === "string" ? body.funnel_id : "unknown",
+        landing_url: typeof body.landing_url === "string" ? body.landing_url : "unknown",
       },
     })
 

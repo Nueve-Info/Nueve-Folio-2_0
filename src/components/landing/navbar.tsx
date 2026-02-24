@@ -19,18 +19,16 @@ export function Navbar() {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
   
-  // Transform values based on scroll position
-  const height = useTransform(scrollY, [0, 50], [72, 60])
-  const paddingTop = useTransform(scrollY, [0, 50], [0, 12])
+  // Logo scale on scroll (navbar height stays fixed)
   const logoScale = useTransform(scrollY, [0, 50], [1, 0.9])
 
   return (
     <nav className={cn(
       "fixed left-0 right-0 z-50 flex justify-center pointer-events-none transition-all duration-300",
-      isExpired ? "top-0" : "top-[68px] md:top-[90px]"
+      isExpired ? "top-0" : "top-[59px] md:top-[72px]"
     )}>
       <motion.div 
-        style={isMobile ? { height, paddingTop } : {}}
+        style={isMobile ? { height: 72 } : {}}
         className={cn(
           "flex w-full items-center justify-between pointer-events-auto transition-all duration-300",
           isMobile 

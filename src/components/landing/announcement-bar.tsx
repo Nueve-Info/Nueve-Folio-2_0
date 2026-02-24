@@ -27,7 +27,7 @@ export function AnnouncementBar() {
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 cursor-pointer overflow-hidden bg-brand-orange"
+      className="fixed top-0 left-0 right-0 z-50 h-[59px] md:h-[72px] cursor-pointer overflow-hidden bg-brand-orange flex items-center"
       onClick={() => scrollToSection("pricing")}
     >
       {/* Animated background pattern (matches pricing card) */}

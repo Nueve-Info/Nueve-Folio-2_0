@@ -72,6 +72,8 @@ export function CheckoutModal({
         priceId,
         ab_experiment: abExperiment,
         ab_variant: abVariant,
+        funnel_id: 'NUF2.0__Bubble-AI',
+        landing_url: window.location.href,
       }),
     })
 
