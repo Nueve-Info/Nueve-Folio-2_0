@@ -19,11 +19,16 @@ import {
   Guarantee,
   Testimonials,
   VideoDeepDive,
+  LeadMagnetSection,
+  LeadMagnetPopup,
   Faq,
   Footer,
 } from "@/components/landing"
+import { useLeadMagnetTrigger } from "@/hooks/useLeadMagnetTrigger"
 
 export default function HomePage() {
+  const { showPopup, dismissPopup } = useLeadMagnetTrigger()
+
   return (
     <div className="min-h-screen bg-background">
       <AnnouncementBar />
@@ -48,9 +53,11 @@ export default function HomePage() {
         <Guarantee />
         <Testimonials />
         <VideoDeepDive />
+        <LeadMagnetSection />
         <Faq />
       </main>
       <Footer />
+      <LeadMagnetPopup isOpen={showPopup} onClose={dismissPopup} />
     </div>
   )
 }

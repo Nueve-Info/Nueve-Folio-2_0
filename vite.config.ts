@@ -73,13 +73,76 @@ function stripeApiPlugin(allEnv: Record<string, string>): Plugin {
   }
 }
 
+const ZAPIER_LEAD_URL =
+  'https://hooks.zapier.com/hooks/catch/15087615/ucn4yqg/'
+
+/**
+ * Vite plugin that proxies /api/lead-webhook in dev to avoid CORS when forwarding to Zapier.
+ */
+function leadWebhookApiPlugin(allEnv: Record<string, string>): Plugin {
+  return {
+    name: 'lead-webhook-api',
+    configureServer(server) {
+      server.middlewares.use(
+        '/api/lead-webhook',
+        async (req: IncomingMessage, res: ServerResponse) => {
+          res.setHeader('Content-Type', 'application/json')
+          res.setHeader('Access-Control-Allow-Origin', '*')
+          res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
+          res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+
+          if (req.method === 'OPTIONS') { res.writeHead(200); res.end(); return }
+          if (req.method !== 'POST') {
+            res.writeHead(405); res.end(JSON.stringify({ error: 'Method not allowed' })); return
+          }
+
+          let body: Record<string, unknown>
+          try {
+            const raw = await new Promise<string>((resolve, reject) => {
+              let data = ''
+              req.on('data', (c: Buffer) => (data += c.toString()))
+              req.on('end', () => resolve(data))
+              req.on('error', reject)
+            })
+            body = raw ? JSON.parse(raw) : {}
+          } catch {
+            res.writeHead(400); res.end(JSON.stringify({ error: 'Invalid JSON' })); return
+          }
+
+          const email = typeof body.email === 'string' ? body.email.trim() : ''
+          const source = typeof body.source === 'string' ? body.source : 'unknown'
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            res.writeHead(400); res.end(JSON.stringify({ error: 'Valid email required' })); return
+          }
+
+          const webhookUrl = allEnv.ZAPIER_LEAD_WEBHOOK_URL || process.env.ZAPIER_LEAD_WEBHOOK_URL || ZAPIER_LEAD_URL
+          try {
+            const forward = await fetch(webhookUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, source }),
+            })
+            if (!forward.ok) {
+              res.writeHead(502); res.end(JSON.stringify({ error: 'Webhook delivery failed' })); return
+            }
+            res.writeHead(200); res.end(JSON.stringify({ ok: true }))
+          } catch (err) {
+            console.error('[vite-lead-webhook]', err)
+            res.writeHead(500); res.end(JSON.stringify({ error: 'Webhook request failed' }))
+          }
+        },
+      )
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const viteEnv = loadEnv(mode, process.cwd(), 'VITE_')
   const allEnv = loadEnv(mode, process.cwd(), '')
 
   return {
-  plugins: [react(), tailwindcss(), stripeApiPlugin(allEnv)],
+  plugins: [react(), tailwindcss(), stripeApiPlugin(allEnv), leadWebhookApiPlugin(allEnv)],
 
   define: {
     'import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY': JSON.stringify(
