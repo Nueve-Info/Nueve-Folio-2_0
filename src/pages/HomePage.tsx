@@ -1,3 +1,4 @@
+import { useState } from "react"
 import {
   AnnouncementBar,
   Navbar,
@@ -27,7 +28,8 @@ import {
 import { useLeadMagnetTrigger } from "@/hooks/useLeadMagnetTrigger"
 
 export default function HomePage() {
-  const { showPopup, dismissPopup } = useLeadMagnetTrigger()
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
+  const { showPopup, dismissPopup } = useLeadMagnetTrigger(isCheckoutOpen)
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,7 +51,10 @@ export default function HomePage() {
         <MentorSection />
         <CourseFit />
         <SocialProof />
-        <Pricing />
+        <Pricing
+          isCheckoutOpen={isCheckoutOpen}
+          onCheckoutChange={setIsCheckoutOpen}
+        />
         <Guarantee />
         <Testimonials />
         <VideoDeepDive />

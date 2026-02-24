@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
 const STORAGE_KEY = "lead-magnet-dismissed"
-const IDLE_MS = 45_000
+const DELAY_MS = 60_000
 
-export function useLeadMagnetTrigger() {
+export function useLeadMagnetTrigger(checkoutOpen: boolean) {
   const [showPopup, setShowPopup] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -14,36 +14,23 @@ export function useLeadMagnetTrigger() {
     sessionStorage.setItem(STORAGE_KEY, "1")
   }, [])
 
-  const triggerPopup = useCallback(() => {
-    if (!isDismissed()) setShowPopup(true)
-  }, [])
-
-  // ── Idle timer (45 s without mouse movement) ──
+  // ── Show after 60 s, only if checkout is not open ──
   useEffect(() => {
-    const resetTimer = () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-      timerRef.current = setTimeout(triggerPopup, IDLE_MS)
-    }
+    if (timerRef.current) clearTimeout(timerRef.current)
 
-    resetTimer()
-    window.addEventListener("mousemove", resetTimer)
+    timerRef.current = setTimeout(() => {
+      if (!isDismissed() && !checkoutOpen) setShowPopup(true)
+    }, DELAY_MS)
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
-      window.removeEventListener("mousemove", resetTimer)
     }
-  }, [triggerPopup])
+  }, [checkoutOpen])
 
-  // ── Exit intent (mouse leaves viewport from the top) ──
+  // ── Hide if checkout opens while popup is visible ──
   useEffect(() => {
-    const handleLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0) triggerPopup()
-    }
-
-    document.documentElement.addEventListener("mouseleave", handleLeave)
-    return () =>
-      document.documentElement.removeEventListener("mouseleave", handleLeave)
-  }, [triggerPopup])
+    if (checkoutOpen && showPopup) setShowPopup(false)
+  }, [checkoutOpen, showPopup])
 
   return { showPopup, dismissPopup } as const
 }

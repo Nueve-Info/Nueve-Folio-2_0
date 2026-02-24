@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { motion } from "framer-motion"
 import {
   Check,
@@ -58,10 +57,14 @@ const valueBuckets = [
   },
 ]
 
-export function Pricing() {
+interface PricingProps {
+  isCheckoutOpen: boolean
+  onCheckoutChange: (open: boolean) => void
+}
+
+export function Pricing({ isCheckoutOpen, onCheckoutChange }: PricingProps) {
   const { days, hours, minutes, seconds, isExpired, isPaused } = useCountdown()
   const { pricing, activeExperiment, variant } = useBubbleAiAbConfig()
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
 
   return (
     <Section
@@ -340,7 +343,7 @@ export function Pricing() {
                         ab_variant: variant,
                         price: pricing.displayPrice,
                       })
-                      setIsCheckoutOpen(true)
+                      onCheckoutChange(true)
                     }}
                   >
                     <span className="mr-2">Join Now</span>
@@ -370,7 +373,7 @@ export function Pricing() {
         priceId={pricing.priceId}
         abExperiment={activeExperiment}
         abVariant={variant}
-        onClose={() => setIsCheckoutOpen(false)}
+        onClose={() => onCheckoutChange(false)}
       />
     </Section>
   )

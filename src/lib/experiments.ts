@@ -21,12 +21,12 @@ const FLAG_HEADING = "NUF2-0__Bubble-AI__Heading-1"
 
 const STRIPE = {
   price: {
-    control: import.meta.env.VITE_STRIPE_PRICE_CONTROL || "price_1T2WGuBskYNJtWpXEbqq50rM",
-    test:    import.meta.env.VITE_STRIPE_PRICE_TEST    || "price_1T2WGuBskYNJtWpXEbqq50rM",
+    control: import.meta.env.VITE_STRIPE_PRICE_CONTROL || "price_1SyIYRBskYNJtWpXtUtJLXSR",
+    test:    import.meta.env.VITE_STRIPE_PRICE_TEST    || "price_1T1k4ABskYNJtWpXJvfvhgjP",
   },
   heading: {
-    control: import.meta.env.VITE_STRIPE_HEADING_CONTROL || "price_1T2WGuBskYNJtWpXEbqq50rM",
-    test:    import.meta.env.VITE_STRIPE_HEADING_TEST    || "price_1T2WGuBskYNJtWpXEbqq50rM",
+    control: import.meta.env.VITE_STRIPE_HEADING_CONTROL || "price_1T1k7iBskYNJtWpXyAn8qAta",
+    test:    import.meta.env.VITE_STRIPE_HEADING_TEST    || "price_1T1k9lBskYNJtWpXikTy4UuS",
   },
 }
 
