@@ -39,16 +39,34 @@ function usePosthogFlag(flagKey: string): string | undefined {
   })
 
   useEffect(() => {
-    const ph = window.posthog
-    if (!ph) return
+    let cancelled = false
 
     const read = () => {
-      const raw = ph.getFeatureFlag(flagKey)
-      setValue(typeof raw === "string" ? raw : undefined)
+      const raw = window.posthog?.getFeatureFlag(flagKey)
+      if (!cancelled) setValue(typeof raw === "string" ? raw : undefined)
     }
 
-    read()
-    ph.onFeatureFlags(read)
+    const subscribe = () => {
+      const ph = window.posthog
+      if (!ph) return
+      read()
+      ph.onFeatureFlags(read)
+    }
+
+    // PostHog may load after the component mounts — poll until available
+    if (window.posthog) {
+      subscribe()
+    } else {
+      const id = setInterval(() => {
+        if (window.posthog) {
+          clearInterval(id)
+          subscribe()
+        }
+      }, 50)
+      return () => { cancelled = true; clearInterval(id) }
+    }
+
+    return () => { cancelled = true }
   }, [flagKey])
 
   return value
