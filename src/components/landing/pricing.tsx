@@ -122,7 +122,7 @@ interface PricingProps {
 
 export function Pricing({ isCheckoutOpen, onCheckoutChange }: PricingProps) {
   const { days, hours, minutes, seconds, isExpired, isPaused } = useCountdown()
-  const { pctRemaining, remaining } = useSpots()
+  const { pctRemaining } = useSpots()
   const { activeExperiment, variant } = useBubbleAiAbConfig()
   const [selectedPriceId, setSelectedPriceId] = useState("")
   const [selectedTierName, setSelectedTierName] = useState("")
