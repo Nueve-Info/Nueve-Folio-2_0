@@ -1,4 +1,5 @@
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Flame } from "lucide-react"
 import { useCountdown } from "@/hooks/useCountdown"
 import { scrollToSection } from "@/lib/utils"
@@ -16,16 +17,36 @@ function TimeBox({ value, label }: { value: number; label: string }) {
   )
 }
 
-export function AnnouncementBar() {
+export function AnnouncementBar({ onVisibilityChange }: { onVisibilityChange?: (visible: boolean) => void }) {
   const { days, hours, minutes, seconds, isExpired, isPaused } = useCountdown()
+  const [pricingCountdownVisible, setPricingCountdownVisible] = useState(false)
 
-  if (isExpired) return null
-  if (isPaused) return null
+  useEffect(() => {
+    const el = document.getElementById("pricing-countdown")
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setPricingCountdownVisible(entry.isIntersecting),
+      { threshold: 0.1 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  // Report actual visibility to parent
+  const isBarVisible = !isExpired && !isPaused && !pricingCountdownVisible
+  useEffect(() => {
+    onVisibilityChange?.(isBarVisible)
+  }, [isBarVisible, onVisibilityChange])
+
+  if (isExpired || isPaused) return null
 
   return (
+    <AnimatePresence>
+      {!pricingCountdownVisible && (
     <motion.div
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -40, opacity: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="fixed top-0 left-0 right-0 z-50 h-[59px] md:h-[72px] cursor-pointer overflow-hidden bg-brand-orange flex items-center"
       onClick={() => scrollToSection("pricing")}
@@ -40,7 +61,7 @@ export function AnnouncementBar() {
         <div className="flex items-center gap-2">
           <Flame className="h-5 w-5 text-white shrink-0 animate-pulse" />
           <span className="text-xs md:text-sm font-black uppercase tracking-[0.2em] text-white">
-            Early Bird Ends
+            Pioneer Access Ends:
           </span>
         </div>
 
@@ -59,5 +80,7 @@ export function AnnouncementBar() {
         </div>
       </div>
     </motion.div>
+      )}
+    </AnimatePresence>
   )
 }

@@ -1,61 +1,119 @@
+import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import {
-  Check,
   ArrowRight,
   Flame,
   ShieldCheck,
   Lock,
-  Zap,
-  Users,
-  Briefcase,
-  TrendingUp,
   Star,
+  Video,
+  ClipboardCheck,
+  BookOpen,
+  FlaskConical,
+  Bot,
+  Code2,
+  Users,
+  MessageCircle,
+  Users2,
+  MessageSquareLock,
+  Map as MapIcon,
+  Grid2x2,
+  Briefcase,
+  GraduationCap,
+  Monitor,
+  Clock,
+  Plus,
 } from "lucide-react"
 import { Section } from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
 import { trackMeta, capturePosthog } from "@/lib/analytics"
 import { useCountdown } from "@/hooks/useCountdown"
+import { useSpots } from "@/hooks/useSpots"
 import { scrollToSection } from "@/lib/utils"
 import { useBubbleAiAbConfig } from "@/lib/experiments"
 import { CheckoutModal } from "@/components/landing/embedded-checkout"
 
-/* ── Card feature bullets (concise, high-signal) ── */
-const cardFeatures = [
-  "Proven framework from 9,000+ portfolio reviews",
-  "Ship a live portfolio in 24 hrs using AI for the heavy lifting",
-  "Build real case studies, even without client work",
-  "See how recruiters screen you in 60 seconds",
-  "mentor feedback until you're interview-ready",
-  "Complete job-search playbook & interview prep",
+/* ── Feature lists ── */
+
+type Feature = { icon: React.ElementType; text: string }
+
+const TIER1_FEATURES: Feature[] = [
+  { icon: Video, text: "16 pre-recorded step-by-step lessons" },
+  { icon: ClipboardCheck, text: "Portfolio audit checklist" },
+  { icon: BookOpen, text: "Case study creation workflow" },
+  { icon: FlaskConical, text: "Idea validation template" },
+  { icon: Bot, text: "Case study AI Agent" },
+  { icon: Code2, text: "Code review AI Agent" },
+  { icon: Users, text: "Community access" },
 ]
 
-/* ── Value buckets for left column story ── */
-const valueBuckets = [
+const TIER2_FEATURES: Feature[] = [
+  { icon: MessageCircle, text: "3 personalised 1:1 mentor feedback sessions" },
+  { icon: Users2, text: "Weekly group accountability check-ins" },
+  { icon: MessageSquareLock, text: "Private Discord community" },
+  { icon: MapIcon, text: "Personalised career roadmap" },
+  { icon: Grid2x2, text: "3 months free Grid access (job outreach tool)" },
+  { icon: Briefcase, text: "Curated job opportunities board" },
+]
+
+const TIER3_FEATURES: Feature[] = [
+  { icon: GraduationCap, text: "Full 1:1 mentoring program (weekly sessions)" },
+  { icon: Monitor, text: "1 month free Claude Code access" },
+]
+
+/* ── Tier definitions ── */
+
+const TIERS = [
   {
-    icon: Users,
-    label: "14-Year Proven Framework",
-    description:
-      "Not theory — a system refined across 9,000+ real portfolio reviews and 2,900+ alumni.",
+    name: "Do It Yourself",
+    price: 37,
+    tagline: "Build your portfolio solo — AI does the heavy lifting for you",
+    badge: null as string | null,
+    priceId: import.meta.env.VITE_STRIPE_TIER1_PRICE_ID || "",
+    access: "1 month of course access",
+    features: TIER1_FEATURES,
+    inheritedLabel: null as string | null,
+    isPopular: false,
+    isDark: false,
+    ctaVariant: "nueve" as "nueve",
+    ctaClassName:
+      "group w-full bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg shadow-green-500/20 hover:opacity-90",
   },
   {
-    icon: Zap,
-    label: "AI-Powered, No Code",
-    description:
-      "Leverage AI to build and ship a professional portfolio — even if you've never touched code.",
+    name: "Mentor Support",
+    price: 57,
+    tagline:
+      "Mentor accountability + community to complete your career shift",
+    badge: "🔥 MOST POPULAR",
+    priceId: import.meta.env.VITE_STRIPE_TIER2_PRICE_ID || "",
+    access: "Lifetime access + future updates",
+    features: TIER2_FEATURES,
+    inheritedLabel: "Everything in Do It Yourself, plus:",
+    isPopular: true,
+    isDark: false,
+    ctaVariant: "nueve" as "nueve",
+    ctaClassName:
+      "group w-full bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg shadow-green-500/20 hover:opacity-90",
   },
   {
-    icon: Briefcase,
-    label: "Works Without Client Work",
-    description:
-      "Build credible, NDA-safe case studies that showcase business thinking — no agency experience needed.",
-  },
-  {
-    icon: TrendingUp,
-    label: "Recruiter Insider Access",
-    description:
-      "Learn exactly how hiring managers screen portfolios in 60 seconds — then beat the filter.",
+    name: "Advanced Mentorship",
+    price: 1489,
+    tagline:
+      "Intensive 1:1 mentoring for the most committed career changers",
+    badge: null as string | null,
+    priceId: import.meta.env.VITE_STRIPE_TIER3_PRICE_ID || "",
+    access: "Lifetime access + future updates",
+    features: TIER3_FEATURES,
+    inheritedLabel: "Everything in Mentor Support, plus:",
+    isPopular: false,
+    isDark: true,
+    ctaVariant: "outline" as "outline",
+    ctaClassName:
+      "group w-full border-brand-orange text-brand-orange hover:bg-brand-orange/5",
   },
 ]
+
+/* ── Component ── */
 
 interface PricingProps {
   isCheckoutOpen: boolean
@@ -64,316 +122,469 @@ interface PricingProps {
 
 export function Pricing({ isCheckoutOpen, onCheckoutChange }: PricingProps) {
   const { days, hours, minutes, seconds, isExpired, isPaused } = useCountdown()
-  const { pricing, activeExperiment, variant } = useBubbleAiAbConfig()
+  const { pctRemaining, remaining } = useSpots()
+  const { activeExperiment, variant } = useBubbleAiAbConfig()
+  const [selectedPriceId, setSelectedPriceId] = useState("")
+  const [selectedTierName, setSelectedTierName] = useState("")
+  const [isStripSticky, setIsStripSticky] = useState(false)
+  const stripRef = useRef<HTMLDivElement>(null)
+
+  // Natural sticky-bottom: the fixed bar appears the instant the inline strip
+  // scrolls fully above the viewport, giving a seamless "sticking" feel.
+  useEffect(() => {
+    const el = stripRef.current
+    if (!el) return
+
+    const check = () => {
+      const rect = el.getBoundingClientRect()
+      // Stick once the strip's bottom edge scrolls above the viewport top
+      setIsStripSticky(rect.bottom <= 0)
+    }
+
+    let ticking = false
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(() => {
+          check()
+          ticking = false
+        })
+      }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true })
+    check()
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  const handleEnroll = (tier: (typeof TIERS)[0]) => {
+    setSelectedPriceId(tier.priceId)
+    setSelectedTierName(tier.name)
+    trackMeta("InitiateCheckout", {
+      content_name: tier.name,
+      value: tier.price,
+      currency: "USD",
+    })
+    capturePosthog("InitiateCheckout", {
+      tier: tier.name,
+      price: tier.price,
+      ab_experiment: activeExperiment,
+      ab_variant: variant,
+    })
+    onCheckoutChange(true)
+  }
 
   return (
     <Section
       id="pricing"
-      className="relative overflow-hidden bg-nueve-black py-20 lg:py-32"
+      className="relative overflow-hidden bg-nueve-black py-16 lg:py-24"
+      containerClassName="px-5 sm:px-12 lg:px-24 xl:px-36"
     >
-      {/* ── Ambient background glows ── */}
+      {/* Ambient glows */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-orange/8 blur-[120px]" />
         <div className="absolute bottom-0 right-0 h-[400px] w-[400px] translate-x-1/4 translate-y-1/4 rounded-full bg-brand-orange/5 blur-[100px]" />
       </div>
 
       <div className="relative z-10">
+        {/* ── Social-proof strip (inline version) ── */}
+        <motion.div
+          ref={stripRef}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.15 }}
+          className={`mx-auto mb-8 max-w-7xl rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-3 sm:px-6 ${
+            isStripSticky ? "invisible" : ""
+          }`}
+        >
+          {/* Mobile: centered two-row layout | Desktop: single row */}
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between sm:gap-4">
+            {/* Row 1 on mobile / Left side on desktop: Stars + Alumni */}
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-3.5 w-3.5 fill-brand-orange text-brand-orange" />
+                ))}
+              </div>
+              <span className="text-xs text-white/30">|</span>
+              <div className="flex items-center gap-2">
+                <div className="flex -space-x-2">
+                  {[
+                    { src: "/avatars/alumni-3.png", alt: "Alumni 1" },
+                    { src: "/avatars/krystian.png", alt: "Alumni 2" },
+                    { src: "/avatars/monique.png", alt: "Alumni 3" },
+                  ].map((avatar, i) => (
+                    <div key={i} className="h-6 w-6 overflow-hidden rounded-full border-2 border-nueve-black sm:h-7 sm:w-7">
+                      <img src={avatar.src} alt={avatar.alt} className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                    </div>
+                  ))}
+                </div>
+                <span className="text-xs font-bold text-nueve-white sm:text-sm">2,900+ alumni</span>
+              </div>
+            </div>
+
+            {/* Row 2 on mobile / Right side on desktop: Guarantee */}
+            <button onClick={() => scrollToSection("guarantee")} className="group flex items-center gap-2 sm:gap-3">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-emerald-600 sm:h-8 sm:w-8">
+                <ShieldCheck className="h-3.5 w-3.5 text-white sm:h-4 sm:w-4" />
+              </div>
+              <span className="text-xs font-bold text-nueve-white sm:text-sm">30-Day Money-Back Guarantee</span>
+            </button>
+          </div>
+        </motion.div>
+
         {/* ── Section header ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
-          className="mb-14 text-center lg:mb-16"
+          className="mb-10 text-center"
         >
           <span className="inline-block rounded-full border border-brand-orange/30 bg-brand-orange/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-orange">
             Limited Access
           </span>
-          <h2 className="mt-6 text-nueve-white">
-            Join Nueve Folio 2.0
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg font-medium text-white/50">
-            Everything you need to build a portfolio that gets you hired
-            — mentorship, AI tools, and a proven system.
+          <h2 className="mt-5 text-nueve-white">Join Nueve Folio 2.0</h2>
+          <p className="mx-auto mt-3 max-w-xl text-base font-medium text-white/50">
+            Choose your path to a portfolio that gets you hired — one-time
+            investment, no subscription, no recurring fees.
           </p>
         </motion.div>
 
-        {/* ── Two-column layout ── */}
-        <div className="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-[1fr_420px] lg:gap-16">
-          {/* ─── Left column — value story (below card on mobile) ─── */}
+        {/* ── Countdown strip ── */}
+        {!isExpired && !isPaused && (
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="order-2 flex flex-col gap-8 lg:order-1"
+            id="pricing-countdown"
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="mx-auto mb-10 max-w-7xl border-y border-white/[0.06] py-6"
           >
-            <h3 className="text-2xl font-black tracking-tight text-nueve-white sm:text-3xl">
-              What you get
-            </h3>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
 
-            {/* Value buckets grid */}
-            <div className="grid gap-5 sm:grid-cols-2">
-              {valueBuckets.map((bucket, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: 0.15 + index * 0.1 }}
-                  className="flex gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.04] p-5"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-orange/15">
-                    <bucket.icon className="h-5 w-5 text-brand-orange" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-nueve-white">{bucket.label}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-white/50">
-                      {bucket.description}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Social proof row */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.55 }}
-              className="flex flex-wrap items-center gap-5 rounded-2xl border border-white/[0.06] bg-white/[0.04] px-6 py-5"
-            >
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="h-4 w-4 fill-brand-orange text-brand-orange"
-                  />
-                ))}
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-2.5">
+              {/* Left — label + clock */}
+              <div className="flex flex-col items-center border-white/[0.06] md:items-start md:border-r md:pr-12">
+                <div className="mb-4 flex items-center gap-2">
+                  <Flame className="h-4 w-4 animate-pulse text-brand-orange" />
+                  <span className="text-sm font-black uppercase tracking-widest text-white/70">
+                    Pioneer Access Ends
+                  </span>
+                </div>
+                <div className="flex items-center gap-5">
                   {[
-                    { src: "/avatars/alumni-3.png", alt: "Alumni 1" },
-                    { src: "/avatars/krystian.png", alt: "Alumni 2" },
-                    { src: "/avatars/monique.png", alt: "Alumni 3" },
-                  ].map((avatar, i) => (
-                    <div
-                      key={i}
-                      className="h-8 w-8 overflow-hidden rounded-full border-2 border-nueve-black"
-                    >
-                      <img
-                        src={avatar.src}
-                        alt={avatar.alt}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                        decoding="async"
-                      />
+                    { value: days, label: "Days" },
+                    { value: hours, label: "Hours" },
+                    { value: minutes, label: "Mins" },
+                    { value: seconds, label: "Secs" },
+                  ].map((unit, i, arr) => (
+                    <div key={unit.label} className="flex items-center gap-5">
+                      <div className="flex flex-col items-center">
+                        <span className="text-3xl font-black tabular-nums text-white sm:text-4xl md:text-5xl">
+                          {String(unit.value).padStart(2, "0")}
+                        </span>
+                        <span className="mt-1 text-[10px] font-bold uppercase tracking-widest text-white/30">
+                          {unit.label}
+                        </span>
+                      </div>
+                      {i < arr.length - 1 && (
+                        <span className="mb-5 text-xl font-black text-white/20">:</span>
+                      )}
                     </div>
                   ))}
                 </div>
-                <span className="text-sm font-bold text-nueve-white">
-                  2,900+ alumni
-                </span>
               </div>
-            </motion.div>
 
-            {/* Guarantee teaser */}
-            <motion.button
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.65 }}
-              onClick={() => scrollToSection("guarantee")}
-              className="group flex items-center gap-4 text-left"
-            >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg shadow-green-500/20">
-                <ShieldCheck className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <p className="font-bold text-nueve-white">
-                  30-Day Risk-Free Guarantee
-                </p>
-                <p className="text-sm text-white/40 transition-colors group-hover:text-white/60">
-                  Land an interview or get a full refund. No questions asked.
-                </p>
-              </div>
-            </motion.button>
-          </motion.div>
-
-          {/* ─── Right column — checkout card (first on mobile) ─── */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative order-1 lg:order-2"
-          >
-            {/* Orange glow behind card */}
-            <div
-              className="absolute -inset-3 rounded-[2.5rem] bg-gradient-to-b from-brand-orange/20 to-brand-orange-light/10 blur-2xl"
-              aria-hidden
-            />
-
-            <div className="relative overflow-hidden rounded-[2rem] bg-white shadow-2xl">
-              {/* Countdown strip */}
-              {!isExpired && !isPaused && (
-                <div className="relative flex flex-col items-center justify-center bg-brand-orange px-4 py-8 overflow-hidden">
-                  {/* Animated background pattern */}
-                  <div className="absolute inset-0 opacity-10">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_white_1px,_transparent_1px)] bg-[size:20px_20px]" />
-                  </div>
-                  
-                  <div className="relative z-10 mb-5 flex items-center gap-2.5 rounded-full bg-white/20 px-4 py-1.5 backdrop-blur-sm">
-                    <Flame className="h-5 w-5 shrink-0 text-white animate-pulse" />
-                    <span className="text-xs font-black uppercase tracking-[0.25em] text-white">
-                      Early Bird Ends:
+              {/* Right — seats claimed */}
+              <div className="flex flex-col items-center md:items-start md:pl-12">
+                <div className="mb-4 flex items-center gap-2">
+                  <Users className="h-4 w-4 text-brand-orange" />
+                  <span className="text-sm font-black uppercase tracking-widest text-white/70">
+                    Seats claimed
+                  </span>
+                </div>
+                <div className="flex w-full flex-col items-center md:items-start">
+                  <div className="relative mt-1.5 w-4/5">
+                    <div className="h-6 w-full overflow-hidden rounded-xl bg-white/[0.06] sm:h-7 md:h-9">
+                      <div
+                        className="h-full rounded-xl bg-brand-orange transition-[width] duration-700 ease-out"
+                        style={{ width: `${100 - pctRemaining}%`, boxShadow: '0 0 24px rgba(248, 129, 13, 0.4)' }}
+                      />
+                    </div>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-black tabular-nums text-white/60">
+                      {100 - pctRemaining}%
                     </span>
                   </div>
-                  
-                  <div className="relative z-10 flex items-center gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-xl shadow-nueve-black/10">
-                        <span className="text-4xl font-black tabular-nums text-nueve-black">
-                          {String(days).padStart(2, "0")}
-                        </span>
-                      </div>
-                      <span className="mt-2 text-[10px] font-black uppercase tracking-widest text-white">
-                        Days
-                      </span>
-                    </div>
-                    
-                    <span className="mb-6 text-3xl font-black text-white/60">:</span>
-                    
-                    <div className="flex flex-col items-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-xl shadow-nueve-black/10">
-                        <span className="text-4xl font-black tabular-nums text-nueve-black">
-                          {String(hours).padStart(2, "0")}
-                        </span>
-                      </div>
-                      <span className="mt-2 text-[10px] font-black uppercase tracking-widest text-white">
-                        Hours
-                      </span>
-                    </div>
-                    
-                    <span className="mb-6 text-3xl font-black text-white/60">:</span>
-                    
-                    <div className="flex flex-col items-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-xl shadow-nueve-black/10">
-                        <span className="text-4xl font-black tabular-nums text-nueve-black">
-                          {String(minutes).padStart(2, "0")}
-                        </span>
-                      </div>
-                      <span className="mt-2 text-[10px] font-black uppercase tracking-widest text-white">
-                        Mins
-                      </span>
-                    </div>
-                    
-                    <span className="mb-6 text-3xl font-black text-white/60">:</span>
-                    
-                    <div className="flex flex-col items-center">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-xl shadow-nueve-black/10">
-                        <span className="text-4xl font-black tabular-nums text-nueve-black">
-                          {String(seconds).padStart(2, "0")}
-                        </span>
-                      </div>
-                      <span className="mt-2 text-[10px] font-black uppercase tracking-widest text-white">
-                        Secs
-                      </span>
-                    </div>
-                  </div>
+                  <span className="mt-2.5 text-[10px] font-bold uppercase tracking-widest text-white/30">
+                    {pctRemaining}% seats left
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </motion.div>
+        )}
+
+        {/* ── 3-card grid ── */}
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 md:grid-cols-3 lg:gap-6">
+          {TIERS.map((tier, index) => (
+            <div
+              key={tier.name}
+              className={`relative border-0 ${
+                tier.isPopular ? "order-first z-10 md:order-none" : ""
+              }`}
+            >
+              {/* Subtle orange border glow — popular card */}
+              {tier.isPopular && (
+                <div
+                  className="pointer-events-none absolute -inset-[2px] rounded-[1.9rem] border-[3px] border-brand-orange/10 shadow-[0_0_32px_rgba(248,129,13,0.28)]"
+                  aria-hidden
+                />
+              )}
+
+              {/* Blue glow — dark card */}
+              {tier.isDark && (
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-[1.5rem] bg-electric-blue/5 blur-[80px]"
+                  aria-hidden
+                />
+              )}
+
+              {/* Badge — sits on the top border of the card */}
+              {tier.badge && (
+                <div className="absolute -top-3.5 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand-orange px-3.5 py-1 text-xs font-black uppercase tracking-wider text-white shadow-lg shadow-brand-orange/30">
+                  {tier.badge}
                 </div>
               )}
 
-              <div className="p-8 md:p-10">
-                {/* Price block */}
-                <div className="mb-8 text-center">
-                  <div className="flex items-baseline justify-center gap-1.5">
-                    <span className="text-6xl font-black text-nueve-black md:text-7xl">
-                      ${pricing.displayPrice}
-                    </span>
-                    <span className="text-lg font-medium text-text-grey/50">
-                      / one-time
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm font-medium text-text-grey/60">
-                    Program Starts: Feb 28
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.5, delay: 0.1 + index * 0.12 }}
+                className={`relative flex h-full flex-col rounded-[1.5rem] p-5 sm:p-7 ${
+                  tier.isDark
+                    ? "border border-brand-orange/40 bg-nueve-black text-white"
+                    : tier.isPopular
+                      ? "border-2 border-brand-orange bg-white"
+                      : "border border-brand-orange/40 bg-white"
+                }`}
+              >
+                {/* Name */}
+                <h3
+                  className={`mt-3 text-center text-xl font-black tracking-tight ${
+                    tier.isDark ? "text-white" : "text-nueve-black"
+                  }`}
+                >
+                  {tier.name}
+                </h3>
+
+                {/* Price */}
+                <div className="mt-4 text-center">
+                  <span
+                    className={`text-5xl font-black ${
+                      tier.isDark ? "text-white" : "text-nueve-black"
+                    }`}
+                  >
+                    ${tier.price.toLocaleString()}
+                  </span>
+                  <p className="mt-1 text-sm font-black text-brand-orange/70">
+                    One-time payment
                   </p>
                 </div>
 
-                {/* Divider */}
-                <div className="mb-6 h-px bg-black/5" />
+                {/* Access duration — prominent badge */}
+                <div
+                  className={`mt-4 flex min-h-[3rem] items-center gap-2.5 rounded-xl border px-3.5 py-2.5 ${
+                    tier.isDark
+                      ? "border-brand-orange/25 bg-brand-orange/10"
+                      : "border-brand-orange/20 bg-brand-orange/8"
+                  }`}
+                >
+                  <Clock
+                    className="h-4 w-4 shrink-0 text-brand-orange"
+                    strokeWidth={2.5}
+                  />
+                  <span
+                    className={`text-sm font-bold ${
+                      tier.isDark ? "text-white" : "text-nueve-black"
+                    }`}
+                  >
+                    {tier.access}
+                  </span>
+                </div>
 
-                {/* Feature checklist */}
-                <ul className="space-y-3">
-                  {cardFeatures.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-orange/10">
-                        <Check
-                          className="h-3 w-3 text-brand-orange"
-                          strokeWidth={3}
-                        />
-                      </div>
-                      <span className="text-sm font-medium leading-snug text-nueve-black">
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                {/* Tagline */}
+                <p
+                  className={`mt-3 min-h-[2.5rem] text-sm leading-relaxed ${
+                    tier.isDark ? "text-white/60" : "text-text-grey/60"
+                  }`}
+                >
+                  {tier.tagline}
+                </p>
+
+                {/* Divider */}
+                <div
+                  className={`my-5 h-px ${
+                    tier.isDark ? "bg-white/[0.08]" : "bg-black/5"
+                  }`}
+                />
+
+                {/* Features */}
+                <div className="flex-1">
+                  <ul className="space-y-3">
+                    {tier.inheritedLabel && (
+                      <li className="flex items-start gap-3">
+                        <div
+                          className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
+                            tier.isDark
+                              ? "bg-brand-orange/15"
+                              : "bg-brand-orange/10"
+                          }`}
+                        >
+                          <Plus className="h-3 w-3 text-brand-orange" />
+                        </div>
+                        <span
+                          className={`text-sm font-black leading-snug ${
+                            tier.isDark ? "text-white/70" : "text-nueve-black"
+                          }`}
+                        >
+                          {tier.inheritedLabel}
+                        </span>
+                      </li>
+                    )}
+                    {tier.features.map((feature, fi) => (
+                      <li key={fi} className="flex items-start gap-3">
+                        <div
+                          className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
+                            tier.isDark
+                              ? "bg-brand-orange/15"
+                              : "bg-brand-orange/10"
+                          }`}
+                        >
+                          <feature.icon className="h-3 w-3 text-brand-orange" />
+                        </div>
+                        <span
+                          className={`text-sm font-medium leading-snug ${
+                            tier.isDark ? "text-white/70" : "text-nueve-black"
+                          }`}
+                        >
+                          {feature.text}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 {/* CTA */}
                 <div className="mt-8">
-                  <Button
-                    variant="nueve"
-                    size="lg"
-                    rounded="pill"
-                    className="group w-full bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg shadow-green-500/20 hover:opacity-90"
-                    data-meta-event="InitiateCheckout"
-                    onClick={() => {
-                      trackMeta("InitiateCheckout", {
-                        content_name: "Nueve Folio 2.0",
-                        value: pricing.displayPrice,
-                        currency: "USD",
-                      })
-                      capturePosthog("InitiateCheckout", {
-                        label: "Join Now",
-                        path: window.location.pathname,
-                        ab_experiment: activeExperiment,
-                        ab_variant: variant,
-                        price: pricing.displayPrice,
-                      })
-                      onCheckoutChange(true)
-                    }}
-                  >
-                    <span className="mr-2">Join Now</span>
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
+                  <p className="mb-3 flex items-center justify-center gap-1.5 text-center text-xs font-black uppercase tracking-widest text-brand-orange">
+                    <Clock className="h-3 w-3" />
+                    Launching March 2nd
+                  </p>
+                  {tier.isDark ? (
+                    <Button
+                      variant={tier.ctaVariant}
+                      size="lg"
+                      rounded="pill"
+                      className={tier.ctaClassName}
+                      asChild
+                    >
+                      <a href="https://syh5xi59tr6.typeform.com/to/HtpRsu32" target="_blank" rel="noopener noreferrer">
+                        <span>Learn More</span>
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </a>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant={tier.ctaVariant}
+                      size="lg"
+                      rounded="pill"
+                      className={tier.ctaClassName}
+                      onClick={() => handleEnroll(tier)}
+                    >
+                      <span>Enroll Now</span>
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  )}
                 </div>
 
                 {/* Trust row */}
-                <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs font-medium text-text-grey/40">
-                  <span className="flex items-center gap-1.5">
+                <div
+                  className={`mt-3 flex items-center justify-center text-xs font-medium ${
+                    tier.isDark ? "text-white/30" : "text-text-grey/40"
+                  }`}
+                >
+                  <span className="flex items-center gap-1">
                     <Lock className="h-3 w-3" />
                     Secure checkout
                   </span>
-                  <span className="hidden h-3 w-px bg-black/10 sm:block" aria-hidden />
-                  <span>One-time payment</span>
-                  <span className="hidden h-3 w-px bg-black/10 sm:block" aria-hidden />
-                  <span>Instant access</span>
                 </div>
-              </div>
+              </motion.div>
             </div>
-          </motion.div>
+          ))}
+        </div>
+
+      </div>
+
+      {/* ── Sticky bottom bar (appears instantly when inline strip sticks) ── */}
+      <div
+        className={`fixed inset-x-0 bottom-0 z-50 border-t border-white/[0.08] bg-nueve-black/90 backdrop-blur-lg ${
+          isStripSticky ? "" : "pointer-events-none invisible"
+        }`}
+      >
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-4 py-2.5 sm:justify-between sm:px-6 sm:py-3">
+          {/* Stars + Alumni (single cluster) */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="flex items-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="h-3 w-3 fill-brand-orange text-brand-orange sm:h-3.5 sm:w-3.5" />
+              ))}
+            </div>
+            <span className="text-white/20">|</span>
+            <div className="flex items-center gap-1.5 sm:gap-2.5">
+              <div className="flex -space-x-1.5 sm:-space-x-2">
+                {[
+                  { src: "/avatars/alumni-3.png", alt: "Alumni 1" },
+                  { src: "/avatars/krystian.png", alt: "Alumni 2" },
+                  { src: "/avatars/monique.png", alt: "Alumni 3" },
+                ].map((avatar, i) => (
+                  <div key={i} className="h-5 w-5 overflow-hidden rounded-full border border-nueve-black sm:h-7 sm:w-7 sm:border-2">
+                    <img src={avatar.src} alt={avatar.alt} className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                  </div>
+                ))}
+              </div>
+              <span className="text-[11px] font-bold text-nueve-white sm:text-sm">2,900+</span>
+            </div>
+          </div>
+
+          {/* Guarantee */}
+          <button onClick={() => scrollToSection("guarantee")} className="group hidden items-center gap-2.5 sm:flex">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-emerald-600">
+              <ShieldCheck className="h-3.5 w-3.5 text-white" />
+            </div>
+            <span className="text-sm font-bold text-nueve-white">30-Day Money-Back Guarantee</span>
+          </button>
+          {/* Mobile: compact guarantee */}
+          <button onClick={() => scrollToSection("guarantee")} className="flex items-center gap-1.5 sm:hidden">
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+            <span className="text-[11px] font-bold text-nueve-white">30-Day Guarantee</span>
+          </button>
         </div>
       </div>
 
       <CheckoutModal
         isOpen={isCheckoutOpen}
-        priceId={pricing.priceId}
+        priceId={selectedPriceId}
+        tierName={selectedTierName}
         abExperiment={activeExperiment}
         abVariant={variant}
-        onClose={() => onCheckoutChange(false)}
+        onClose={() => {
+          onCheckoutChange(false)
+          setSelectedPriceId("")
+          setSelectedTierName("")
+        }}
       />
     </Section>
   )
