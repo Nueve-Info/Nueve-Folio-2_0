@@ -29,12 +29,13 @@ import { useLeadMagnetTrigger } from "@/hooks/useLeadMagnetTrigger"
 
 export default function HomePage() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
+  const [announcementBarVisible, setAnnouncementBarVisible] = useState(false)
   const { showPopup, dismissPopup } = useLeadMagnetTrigger(isCheckoutOpen)
 
   return (
     <div className="min-h-screen bg-background">
-      <AnnouncementBar />
-      <Navbar />
+      <AnnouncementBar onVisibilityChange={setAnnouncementBarVisible} />
+      <Navbar announcementBarVisible={announcementBarVisible} />
       <main>
         <Hero />
         <Logos />

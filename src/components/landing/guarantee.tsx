@@ -28,7 +28,7 @@ export function Guarantee() {
               100% Risk-Free Guarantee
             </h3>
             <p className="mt-4 text-lg font-medium leading-relaxed text-text-grey sm:text-xl">
-              If you don't land an interview within 30 days of publishing your new portfolio, we'll refund you in full. No questions asked.
+              If you're not completely satisfied within 30 days, we'll refund you in full. No questions asked.
             </p>
           </div>
         </div>
