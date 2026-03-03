@@ -120,7 +120,7 @@ export function LeadMagnetSection() {
               <p className="mt-2 text-sm text-white/50">
                 Enter your email and we'll send it straight to your inbox.
               </p>
-              <div className="mt-6 mb-6 w-full overflow-hidden rounded-lg border border-white/10 lg:max-w-[240px]">
+              <div className="mt-6 mb-6 w-full overflow-hidden rounded-lg lg:max-w-[240px]">
             <img
               src={ebookCover}
               alt="The State of Design in 2026 ebook cover"
