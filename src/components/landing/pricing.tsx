@@ -312,7 +312,7 @@ export function Pricing({ isCheckoutOpen, onCheckoutChange }: PricingProps) {
                         style={{ width: `${100 - pctRemaining}%`, boxShadow: '0 0 24px rgba(248, 129, 13, 0.4)' }}
                       />
                     </div>
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-black tabular-nums text-white/60">
+                    <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-black tabular-nums text-white">
                       {100 - pctRemaining}%
                     </span>
                   </div>
@@ -480,7 +480,7 @@ export function Pricing({ isCheckoutOpen, onCheckoutChange }: PricingProps) {
                 {/* CTA */}
                 <div className="mt-8">
                   <p className="mb-3 flex items-center justify-center gap-1.5 text-center text-xs font-black uppercase tracking-widest text-brand-orange">
-                    <Clock className="h-3 w-3" />
+                    <Flame className="h-3 w-3" />
                     Instant Access
                   </p>
                   {tier.isDark ? (
