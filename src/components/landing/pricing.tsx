@@ -481,7 +481,7 @@ export function Pricing({ isCheckoutOpen, onCheckoutChange }: PricingProps) {
                 <div className="mt-8">
                   <p className="mb-3 flex items-center justify-center gap-1.5 text-center text-xs font-black uppercase tracking-widest text-brand-orange">
                     <Clock className="h-3 w-3" />
-                    Launching March 2nd
+                    Instant Access
                   </p>
                   {tier.isDark ? (
                     <Button
