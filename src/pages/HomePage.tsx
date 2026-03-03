@@ -10,7 +10,6 @@ import {
   Insights,
   FeaturedTestimonial,
   Story,
-  AiSection,
   PublishSection,
   MeetMentor,
   MentorSection,
@@ -46,7 +45,7 @@ export default function HomePage() {
         <Insights />
         <FeaturedTestimonial />
         <Story />
-        <AiSection />
+        {/* <AiSection /> */}
         <PublishSection />
         <MeetMentor />
         <MentorSection />
