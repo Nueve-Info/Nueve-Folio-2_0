@@ -93,12 +93,12 @@ export function LeadMagnetPopup({ isOpen, onClose }: LeadMagnetPopupProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="relative w-full max-w-md rounded-2xl bg-white p-8 sm:p-10"
+            className="relative w-full max-w-md max-h-[90dvh] overflow-y-auto rounded-2xl bg-white p-6 sm:p-10"
           >
             {/* Close button */}
             <button
               onClick={onClose}
-              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-nueve-black transition-colors hover:bg-black/10"
+              className="sticky top-0 z-10 ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black/5 text-nueve-black transition-colors hover:bg-black/10"
               aria-label="Close"
             >
               <X className="h-4 w-4" />
