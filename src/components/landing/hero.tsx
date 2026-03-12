@@ -53,20 +53,34 @@ export function Hero() {
         <div className="relative">
           <FloatingBubbles className="z-20" />
           <div className="mx-auto max-w-5xl text-center relative z-10">
-            {/* Badge */}
+            {/* Alumni badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-8 flex justify-center"
+            className="mb-8 flex items-center justify-center gap-3"
           >
-            <div className="inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/5 px-4 py-1.5 text-sm font-bold text-brand-orange">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-orange opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-orange"></span>
-              </span>
-              Enrollment open now
+            <div className="flex -space-x-3">
+              {[
+                { src: "/avatars/alumni-3.png", alt: "Alumni 1" },
+                { src: "/avatars/krystian.png", alt: "Alumni 2" },
+                { src: "/avatars/monique.png", alt: "Alumni 3" },
+              ].map((avatar, i) => (
+                <div
+                  key={i}
+                  className="h-10 w-10 overflow-hidden rounded-full border-2 border-white bg-nueve-black shadow-sm"
+                >
+                  <img
+                    src={avatar.src}
+                    alt={avatar.alt}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ))}
             </div>
+            <span className="text-sm font-bold text-nueve-black">
+              2,900+ Nueve Alumni
+            </span>
           </motion.div>
 
           {/* Heading — A/B tested via PostHog */}
@@ -110,35 +124,36 @@ export function Hero() {
             </span>
           </motion.p>
 
-          {/* Alumni avatars */}
+          {/* Trustpilot – Micro TrustScore (static) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-10 flex items-center justify-center gap-4"
+            className="mt-8 flex justify-center"
           >
-            <div className="flex -space-x-4">
-              {[
-                { src: "/avatars/alumni-3.png", alt: "Alumni 1" },
-                { src: "/avatars/krystian.png", alt: "Alumni 2" },
-                { src: "/avatars/monique.png", alt: "Alumni 3" },
-              ].map((avatar, i) => (
-                <div
-                  key={i}
-                  className="h-12 w-12 overflow-hidden rounded-full border-2 border-white bg-nueve-black shadow-sm"
-                >
-                  <img
-                    src={avatar.src}
-                    alt={avatar.alt}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-            <span className="text-lg font-bold text-nueve-black">
-              2,900+ Nueve Alumni
-            </span>
+            <a
+              href="https://www.trustpilot.com/review/nueve.design"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm no-underline"
+            >
+              {/* Trustpilot star icon */}
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 0L15.6 8.4H24L17.4 13.2L19.8 22.8L12 17.4L4.2 22.8L6.6 13.2L0 8.4H8.4L12 0Z" fill="#00b67a" />
+                <path d="M16.8 15.6L15.6 8.4L12 17.4L16.8 15.6Z" fill="#005128" />
+              </svg>
+              <span className="font-bold text-nueve-black">TrustScore 4.5</span>
+              <span className="mx-0.5 text-black/20">|</span>
+              <span className="text-text-grey">15 reviews</span>
+              <span className="mx-0.5 text-black/20">|</span>
+              {/* Trustpilot logo */}
+              <svg className="h-4" viewBox="0 0 120 30" fill="none" aria-hidden="true">
+                <path d="M30.6 11.1H24.1L22 4.5L19.9 11.1H13.4L18.8 15.3L16.7 21.9L22 17.7L27.3 21.9L25.2 15.3L30.6 11.1Z" fill="#00b67a" />
+                <text x="34" y="20" fill="#191919" fontFamily="system-ui, sans-serif" fontSize="14" fontWeight="700" letterSpacing="-0.01em">Trustpilot</text>
+              </svg>
+            </a>
           </motion.div>
+
           </div>
         </div>
 
@@ -154,7 +169,7 @@ export function Hero() {
           >
             {loadVideo ? (
               <iframe
-                src="https://player.vimeo.com/video/1163267877?autoplay=1&amp;muted=1&amp;loop=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
+                src="https://player.vimeo.com/video/1163267877?autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0&playsinline=1&background=1"
                 className="h-full w-full"
                 frameBorder="0"
                 sandbox="allow-scripts allow-same-origin"

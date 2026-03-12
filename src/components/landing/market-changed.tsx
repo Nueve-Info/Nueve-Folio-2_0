@@ -71,7 +71,7 @@ export function MarketChanged() {
                 {index === 0 && gridInView ? (
                   <iframe
                     title="vimeo-player"
-                    src="https://player.vimeo.com/video/1152984649?h=1883b628c6&autoplay=1&muted=1&controls=0&background=1&loop=1&autopause=0"
+                    src="https://player.vimeo.com/video/1152984649?h=1883b628c6&autoplay=1&muted=1&controls=0&background=1&loop=1&autopause=0&playsinline=1"
                     className="absolute inset-0 block h-full w-full border-0"
                     allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                     allowFullScreen
@@ -79,7 +79,7 @@ export function MarketChanged() {
                 ) : index === 1 && gridInView ? (
                   <iframe
                     title="vimeo-player"
-                    src="https://player.vimeo.com/video/1152980459?h=1708bf874a&autoplay=1&muted=1&controls=0&background=1&loop=1&autopause=0"
+                    src="https://player.vimeo.com/video/1152980459?h=1708bf874a&autoplay=1&muted=1&controls=0&background=1&loop=1&autopause=0&playsinline=1"
                     className="absolute inset-0 block h-full w-full border-0"
                     allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                     allowFullScreen
@@ -87,7 +87,7 @@ export function MarketChanged() {
                 ) : index === 2 && gridInView ? (
                   <iframe
                     title="vimeo-player"
-                    src="https://player.vimeo.com/video/1152992910?autoplay=1&muted=1&controls=0&background=1&loop=1&autopause=0"
+                    src="https://player.vimeo.com/video/1152992910?autoplay=1&muted=1&controls=0&background=1&loop=1&autopause=0&playsinline=1"
                     className="absolute inset-0 block h-full w-full border-0"
                     allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                     allowFullScreen
